@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "../errors/AppError";
-import { HTTP_STATUS } from "../constants/httpStatus";
-import { ERROR_MESSAGES } from "../constants/messages";
+import { AppError } from "../errors/AppError.js";
+import { HTTP_STATUS } from "../constants/httpStatus.js";
+import { ERROR_MESSAGES } from "../constants/messages.js";
 
 export const errorMiddleware = (
   error: Error,

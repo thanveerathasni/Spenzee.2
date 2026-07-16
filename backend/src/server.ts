@@ -1,8 +1,8 @@
 import "reflect-metadata";
 
-import app from "./app";
-import { connectDatabase } from "./config/database";
-import { env } from "./config/env";
+import app from "./app.js";
+import { connectDatabase } from "./config/database.js";
+import { env } from "./config/env.js";
 
 const startServer = async (): Promise<void> => {
   try {

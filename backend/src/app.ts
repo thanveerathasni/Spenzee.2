@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { errorMiddleware } from "./middleware/error.middleware";
+import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app: Application = express();
 
