@@ -1,37 +1,44 @@
 import { Model } from "mongoose";
-
-import { IBaseRepository } from "../../interfaces/repositories/base/IBaseRepository"
+import { IBaseRepository } from "../../interfaces/repositories/base/IBaseRepository";
 
 export abstract class BaseRepository<T> implements IBaseRepository<T> {
 
     constructor(
         protected readonly model: Model<T>
-    ) {}
+    ) { }
 
     async create(entity: Partial<T>): Promise<T> {
-        throw new Error("Method not implemented.");
+        const document = await this.model.create(entity);
+        return document;
     }
 
     async findById(id: string): Promise<T | null> {
-        throw new Error("Method not implemented.");
+        return this.model.findById(id);
     }
-
     async findOne(filter: Partial<T>): Promise<T | null> {
-        throw new Error("Method not implemented.");
+        return this.model.findOne(filter);
     }
-
     async updateById(
         id: string,
         entity: Partial<T>
     ): Promise<T | null> {
-        throw new Error("Method not implemented.");
+        return this.model.findByIdAndUpdate(
+            id,
+            entity,
+            {
+                new: true,
+            }
+        );
     }
 
     async deleteById(id: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
-    }
+        const result = await this.model.findByIdAndDelete(id);
 
+        return result !== null;
+    }
     async exists(filter: Partial<T>): Promise<boolean> {
-        throw new Error("Method not implemented.");
+        const document = await this.model.exists(filter);
+
+        return document !== null;
     }
 }
