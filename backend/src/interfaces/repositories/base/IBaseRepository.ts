@@ -3,12 +3,11 @@ export interface IBaseRepository<T> {
 
     findById(id: string): Promise<T | null>;
 
+    findOne(criteria: Record<string, unknown>): Promise<T | null>;
 
     updateById(id: string, entity: Partial<T>): Promise<T | null>;
 
     deleteById(id: string): Promise<boolean>;
 
     exists(criteria: Record<string, unknown>): Promise<boolean>;
-
-    findOne(criteria: Record<string, unknown>): Promise<T | null>;
 }
