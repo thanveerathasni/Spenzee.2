@@ -1,7 +1,9 @@
 import { Response, Request, NextFunction } from "express";
+import { injectable } from "inversify";
 
 import { IUserController, UserParams } from "../../interfaces/controllers/user/IUserController";import { IUserService } from "../../interfaces/services/user/IUserService";
 import { SUCCESS_MESSAGES } from "../../constants/messages";
+@injectable()
 
 export class UserController implements IUserController {
 

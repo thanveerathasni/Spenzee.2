@@ -1,7 +1,8 @@
+import { injectable } from "inversify";
 import { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
 import { IUserService } from "../../interfaces/services/user/IUserService";
 import { IUser } from "../../models/User.model";
-
+@injectable()
 export class UserService implements IUserService {
 
     constructor(
