@@ -1,5 +1,5 @@
-import { HTTP_STATUS } from "../constants/httpStatus.js";
-import { AppError } from "./AppError.js";
+import { HTTP_STATUS } from "../constants";
+import { AppError } from "./AppError";
 
 export class NotFoundError extends AppError {
   constructor(message: string) {
