@@ -1,33 +1,13 @@
 import { Router } from "express";
 
-import { UserController } from "../../controllers/user/UserController";
-import { UserRepository } from "../../repositories/user/UserRepository";
-import { UserService } from "../../services/user/UserService";
-
+import { container } from "../../container/container";
+import { TYPES } from "../../container/types";
+import { type IUserController } from "../../interfaces/controllers/user/IUserController";
 const router = Router();
+const userController = container.get<IUserController>(TYPES.UserController);
 
-const userRepository = new UserRepository();
+router.post("/", userController.createUser.bind(userController));
 
-const userService = new UserService(userRepository);
-
-const userController = new UserController(userService);
-
-
-
-
-router.post(
-    "/",
-    userController.createUser.bind(userController)
-);
-
-router.get(
-    "/:id",
-    userController.getUserById.bind(userController)
-);
+router.get("/:id", userController.getUserById.bind(userController));
 
 export default router;
-
-
-
-
-

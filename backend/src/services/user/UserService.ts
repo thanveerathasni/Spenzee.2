@@ -7,37 +7,34 @@ import { IUser } from "../../models/User.model";
 
 @injectable()
 export class UserService implements IUserService {
-    constructor(
-        @inject(TYPES.UserRepository)
-        private readonly userRepository: IUserRepository
-    ) {}
+  constructor(
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: IUserRepository,
+  ) {}
 
-    async createUser(user: Partial<IUser>): Promise<IUser> {
-        const existingUser = await this.userRepository.findByEmail(user.email!);
+  async createUser(user: Partial<IUser>): Promise<IUser> {
+    const existingUser = await this.userRepository.findByEmail(user.email!);
 
-        if (existingUser) {
-            throw new Error("email already exist");
-        }
-
-        return this.userRepository.create(user);
+    if (existingUser) {
+      throw new Error("email already exist");
     }
 
-    async getUserById(id: string): Promise<IUser | null> {
-        return this.userRepository.findById(id);
-    }
+    return this.userRepository.create(user);
+  }
 
-    async updateUser(
-        id: string,
-        user: Partial<IUser>
-    ): Promise<IUser | null> {
-        return this.userRepository.updateById(id, user);
-    }
+  async getUserById(id: string): Promise<IUser | null> {
+    return this.userRepository.findById(id);
+  }
 
-    async getUserByEmail(email: string): Promise<IUser | null> {
-        return this.userRepository.findByEmail(email);
-    }
+  async updateUser(id: string, user: Partial<IUser>): Promise<IUser | null> {
+    return this.userRepository.updateById(id, user);
+  }
 
-    async deleteUser(id: string): Promise<boolean> {
-        return this.userRepository.deleteById(id);
-    }
+  async getUserByEmail(email: string): Promise<IUser | null> {
+    return this.userRepository.findByEmail(email);
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    return this.userRepository.deleteById(id);
+  }
 }

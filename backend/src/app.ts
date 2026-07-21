@@ -1,7 +1,7 @@
-import express, { Application } from "express";
+import express, { type Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRoutes from "./routes/user/UserRoutes"
+import userRoutes from "./routes/user/UserRoutes";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app: Application = express();
@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
 
-// global error handler 
+// global error handler
 
 app.use(errorMiddleware);
 

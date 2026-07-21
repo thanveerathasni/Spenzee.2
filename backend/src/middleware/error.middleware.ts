@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 import { AppError } from "../errors/AppError.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
 import { ERROR_MESSAGES } from "../constants/messages.js";
