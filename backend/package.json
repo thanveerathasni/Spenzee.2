@@ -26,7 +26,8 @@
     "inversify": "^7.11.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.4",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.3",

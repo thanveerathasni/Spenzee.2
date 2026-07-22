@@ -19,5 +19,7 @@ const startServer = async (): Promise<void> => {
   }
 };
 
-startServer();
-// test
+startServer().catch((error) => {
+  console.error("Unhandled server startup error:", error);
+  process.exit(1);
+});

@@ -2,8 +2,7 @@ import express, { type Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user/UserRoutes";
-import { errorMiddleware } from "./middleware/error.middleware.js";
-
+import { errorHandler } from "./middlewares/errorHandler";
 const app: Application = express();
 
 app.use(cors());
@@ -18,6 +17,6 @@ app.use("/api/users", userRoutes);
 
 // global error handler
 
-app.use(errorMiddleware);
+app.use(errorHandler);
 
 export default app;
