@@ -3,7 +3,7 @@ import { injectable, inject } from "inversify";
 import { TYPES } from "../../container/types";
 import { IUserController, UserParams } from "../../interfaces/controllers/user/IUserController";
 import { IUserService } from "../../interfaces/services/user/IUserService";
-import { SUCCESS_MESSAGES } from "../../constants/messages";
+// import { SUCCESS_MESSAGES } from "../../constants/messages";
 @injectable()
 export class UserController implements IUserController {
   constructor(
