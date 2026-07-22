@@ -1,13 +1,33 @@
-export interface IBaseRepository<T>{
+import { Model } from "mongoose";
 
-create (entity : Partial<T>):Promise<T>;
 
-findById(id: string) :Promise<T |null>
 
-updateById(id : string, entity : Partial<T>) : Promise<T | null>
+export interface IBaseRepository<T> {
+    create(data: Partial<T>): Promise<T>;
 
-deleteById(id:string) :Promise<boolean>
+    findById(id: string): Promise<T |null>;
 
-exists(id:string) : Promise<boolean>
+    findOne(filter: Record<string, unknown>): Promise<T | null>;
 
+    findAll(filter?: Record<string, unknown>): Promise<T[]>;
+
+    updateById(
+        id: string,
+        data: Partial<T>
+    ): Promise<T | null>;
+
+    updateOne(
+        filter: Record<string, unknown>,
+        data: Partial<T>
+    ): Promise<T | null>;
+
+    exists(filter: Record<string, unknown>): Promise<boolean>;
+
+    count(filter?: Record<string, unknown>): Promise<number>;
+
+    softDelete(id: string): Promise<boolean>;
+
+    restore(id: string): Promise<boolean>;
+
+    forceDelete(id: string): Promise<boolean>;
 }
