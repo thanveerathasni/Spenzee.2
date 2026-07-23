@@ -1,12 +1,6 @@
 export const TYPES = {
   Logger: Symbol.for("Logger"),
 
-  UserRepository: Symbol.for("UserRepository"),
-
-  UserService: Symbol.for("UserService"),
-
-  UserController: Symbol.for("UserController"),
-
 
 
 // auth  types 
@@ -15,7 +9,22 @@ AuthRepository : Symbol.for("AuthRepository"),
 
 AuthService: Symbol.for("AuthService"),
 
-AuthController: Symbol.for("AuthController"),
 
+
+
+    // Repositories
+    UserRepository: Symbol.for("UserRepository"),
+    PendingRegistrationRepository: Symbol.for("PendingRegistrationRepository"),
+    OtpRepository: Symbol.for("OtpRepository"),
+
+    // Services
+    PasswordService: Symbol.for("PasswordService"),
+    OtpService: Symbol.for("OtpService"),
+    EmailService: Symbol.for("EmailService"),
+    RegisterUserService: Symbol.for("RegisterUserService"),
+
+    // Controllers
+    UserController: Symbol.for("UserController"),
+    AuthController: Symbol.for("AuthController"),
 
 } as const;

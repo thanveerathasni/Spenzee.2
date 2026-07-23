@@ -7,6 +7,8 @@ export interface IOtp {
     attempts: number;
     createdAt: Date;
     updatedAt: Date;
+
+    deletedAt: Date | null;
 }
 
 const OtpSchema = new Schema<IOtp>(
@@ -29,6 +31,10 @@ const OtpSchema = new Schema<IOtp>(
             type: Number,
             default: 0,
         },
+        deletedAt: {
+    type: Date,
+    default: null,
+},
     },
     {
         timestamps: true,
@@ -37,6 +43,9 @@ const OtpSchema = new Schema<IOtp>(
 );
 
 OtpSchema.index({ email: 1 });
+OtpSchema.index({
+    deletedAt: 1,
+});
 OtpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export const OtpModel = model<IOtp>("Otp", OtpSchema);
