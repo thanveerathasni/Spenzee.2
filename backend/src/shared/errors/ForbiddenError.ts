@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from "../constants/httpStatus";
+import { HTTP_STATUS } from "../constants";
 import { AppError } from "./AppError";
 
 export class ForbiddenError extends AppError {

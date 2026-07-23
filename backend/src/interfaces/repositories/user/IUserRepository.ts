@@ -1,5 +1,5 @@
-import { IUser } from "../../../models/User.model";
-import { ISoftDeleteRepository } from "../base/ISoftDeleteRepository";
+import type{ IUser } from "../../../models/User.model";
+import type{ ISoftDeleteRepository } from "../base/ISoftDeleteRepository";
 
 export interface IUserRepository
     extends ISoftDeleteRepository<IUser> {
