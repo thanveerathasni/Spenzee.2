@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, type Types } from "mongoose";
 import { AddressType } from "../shared/enums/AddressType";
 
 export interface IAddress {

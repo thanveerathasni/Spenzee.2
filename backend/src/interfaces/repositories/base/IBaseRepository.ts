@@ -1,66 +1,41 @@
-<<<<<<< HEAD
-import { Model } from "mongoose";
-
+import type { UpdateQuery } from "mongoose";
 
 export interface IBaseRepository<T> {
     create(
-        data: Partial<T>
+        data: Partial<T>,
     ): Promise<T>;
 
     findById(
-        id: string
+        id: string,
     ): Promise<T | null>;
 
     findOne(
-        filter: Record<string, unknown>
+        filter: Record<string, unknown>,
     ): Promise<T | null>;
 
     findAll(
-        filter?: Record<string, unknown>
+        filter?: Record<string, unknown>,
     ): Promise<T[]>;
 
     updateById(
         id: string,
-        data: Partial<T>
+        update: UpdateQuery<T>,
     ): Promise<T | null>;
 
     updateOne(
         filter: Record<string, unknown>,
-        data: Partial<T>
+        update: UpdateQuery<T>,
     ): Promise<T | null>;
 
     exists(
-        filter: Record<string, unknown>
+        filter: Record<string, unknown>,
     ): Promise<boolean>;
 
     count(
-        filter?: Record<string, unknown>
+        filter?: Record<string, unknown>,
     ): Promise<number>;
 
-    softDelete(
-        filter: Record<string, unknown>
-    ): Promise<boolean>;
-
-    restore(
-        filter: Record<string, unknown>
-    ): Promise<boolean>;
-
     forceDelete(
-        filter: Record<string, unknown>
+        filter: Record<string, unknown>,
     ): Promise<boolean>;
 }
-=======
-export interface IBaseRepository<T> {
-  create(entity: Partial<T>): Promise<T>;
-
-  findById(id: string): Promise<T | null>;
-
-  findOne(criteria: Record<string, unknown>): Promise<T | null>;
-
-  updateById(id: string, entity: Partial<T>): Promise<T | null>;
-
-  deleteById(id: string): Promise<boolean>;
-
-  exists(criteria: Record<string, unknown>): Promise<boolean>;
-}
->>>>>>> feature/project-foundation

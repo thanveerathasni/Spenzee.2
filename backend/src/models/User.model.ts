@@ -11,8 +11,8 @@ export interface IUser {
     profilePicture?: string;
     isVerified: boolean;
     isActive: boolean;
-    deletedAt?: Date;
     lastLoginAt?: Date;
+    deletedAt?: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -61,22 +61,23 @@ const UserSchema = new Schema<IUser>(
             type: Boolean,
             default: true,
         },
+        lastLoginAt: {
+            type: Date,
+        },
         deletedAt: {
             type: Date,
             default: null,
-        },
-        lastLoginAt: {
-            type: Date,
         },
     },
     {
         timestamps: true,
         versionKey: false,
-    }
+    },
 );
 
 UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ isActive: 1 });
 UserSchema.index({ createdAt: -1 });
+UserSchema.index({ deletedAt: 1 });
 
 export const UserModel = model<IUser>("User", UserSchema);

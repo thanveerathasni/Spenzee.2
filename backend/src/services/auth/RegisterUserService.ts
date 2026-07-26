@@ -38,9 +38,9 @@ export class RegisterUserService
         private readonly emailService: IEmailService,
     ) {}
 
-    async register(
-        data: RegisterUserDto,
-    ): Promise<void> {
+ async execute(
+    data: RegisterUserDto,
+): Promise<void> { {
 
 const existingUser = await this.userRepository.findByEmail(data.email)
 const hashedPassword = await this.passwordService.hash(data.password)
@@ -53,7 +53,7 @@ const expiresAt = new Date(
 
 const hashedOtp = await this.otpService.hashOtp(otp)
 
-const otpExpiresAt = await this.otpService.getExpiryTime()
+const otpExpiresAt =  this.otpService.getExpiryTime()
 
 const existingOtp = await this.otpRepository.findByEmail(data.email)
 
@@ -104,8 +104,9 @@ await this.emailService.sendOtp(
     data.email,
     otp,
 );
-
+console.log("Generated OTP:", otp);
 
     }
 }
 
+}

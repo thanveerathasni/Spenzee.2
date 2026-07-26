@@ -11,8 +11,6 @@ import {
 
 
 
-
-
 @injectable()
 
 export class PendingRegistrationRepository  extends BaseRepository<IPendingRegistration> implements IPendingRegistrationRepository{
@@ -28,7 +26,7 @@ async findByEmail(email: string): Promise<IPendingRegistration | null> {
 async create(data: Pick<IPendingRegistration, "firstName" | "lastName" | "email" | "password" | "expiresAt">): Promise<IPendingRegistration> {
     
 
-return super.create({data})
+return super.create(data)
 
 }
 
@@ -52,8 +50,8 @@ return super.create({data})
 }
   async deleteByEmail(
     email: string,
-  ): Promise<void> {
-    await this.softDelete({
+  ): Promise<boolean> {
+    return this.softDelete({
       email,
     });
   }

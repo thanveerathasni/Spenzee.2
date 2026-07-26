@@ -1,0 +1,61 @@
+import type { Container } from "inversify";
+
+import { TYPES } from "../types";
+
+import type { IAuthController } from "../../interfaces/controllers/auth/IAuthController";
+
+import type { IPendingRegistrationRepository } from "../../interfaces/repositories/auth/IPendingRegistrationRepository";
+import type { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
+
+import type { IRegisterUserService } from "../../interfaces/services/auth/IRegisterUserService";
+import type { IVerifyOtpService } from "../../interfaces/services/auth/IVerifyOtpService";
+import type { IPasswordService } from "../../interfaces/services/auth/IPasswordService";
+import type { IOtpService } from "../../interfaces/services/auth/IOtpService";
+import type { IEmailService } from "../../interfaces/services/email/IEmailService";
+
+
+import { PendingRegistrationRepository } from "../../repositories/auth/PendingRegistrationRepository";
+import { OtpRepository } from "../../repositories/auth/OtpRepository";
+import { PasswordService } from "../../services/auth/PasswordService";
+import { OtpService } from "../../services/auth/OtpService";
+import { EmailService } from "../../services/email/EmailService";
+import { RegisterUserService } from "../../services/auth/RegisterUserService";
+import { VerifyOtpService } from "../../services/auth/VerifyOtpService";
+
+import { AuthController } from "../../controllers/auth/AuthController";
+
+export function registerAuthBindings(container: Container): void {
+    container
+        .bind<IPendingRegistrationRepository>(
+            TYPES.PendingRegistrationRepository,
+        )
+        .to(PendingRegistrationRepository);
+
+    container
+        .bind<IOtpRepository>(TYPES.OtpRepository)
+        .to(OtpRepository);
+
+    container
+        .bind<IRegisterUserService>(TYPES.RegisterUserService)
+        .to(RegisterUserService);
+
+    container
+        .bind<IVerifyOtpService>(TYPES.VerifyOtpService)
+        .to(VerifyOtpService);
+
+    container
+        .bind<IAuthController>(TYPES.AuthController)
+        .to(AuthController);
+
+        container
+    .bind<IPasswordService>(TYPES.PasswordService)
+    .to(PasswordService);
+
+container
+    .bind<IOtpService>(TYPES.OtpService)
+    .to(OtpService);
+
+container
+    .bind<IEmailService>(TYPES.EmailService)
+    .to(EmailService);
+}

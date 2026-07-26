@@ -1,14 +1,9 @@
-import { FilterQuery } from "mongoose";
-
-import { IBaseRepository } from "./IBaseRepository";
-
-export interface ISoftDeleteRepository<T>
-    extends IBaseRepository<T> {
+export interface ISoftDeleteRepository {
     softDelete(
-        filter: FilterQuery<T>,
+        filter: Record<string, unknown>,
     ): Promise<boolean>;
 
     restore(
-        filter: FilterQuery<T>,
+        filter: Record<string, unknown>,
     ): Promise<boolean>;
 }

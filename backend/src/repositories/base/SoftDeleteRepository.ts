@@ -1,20 +1,17 @@
-import {
-    FilterQuery,
-    Model,
-} from "mongoose";
+import type { Model } from "mongoose";
 
 import { BaseRepository } from "./BaseRepository";
 
 export abstract class SoftDeleteRepository<
-    T extends { deletedAt: Date | null },
+    T extends { deletedAt?: Date | null },
 > extends BaseRepository<T> {
     constructor(protected readonly model: Model<T>) {
         super(model);
     }
 
-    protected buildFilter(
-        filter: FilterQuery<T> = {},
-    ): FilterQuery<T> {
+    protected override buildFilter(
+        filter: Record<string, unknown> = {},
+    ): Record<string, unknown> {
         return {
             ...filter,
             deletedAt: null,
@@ -34,19 +31,19 @@ export abstract class SoftDeleteRepository<
     }
 
     override async findOne(
-        filter: FilterQuery<T>,
+        filter: Record<string, unknown>,
     ): Promise<T | null> {
         return super.findOne(this.buildFilter(filter));
     }
 
     override async findAll(
-        filter: FilterQuery<T> = {},
+        filter: Record<string, unknown> = {},
     ): Promise<T[]> {
         return super.findAll(this.buildFilter(filter));
     }
 
     override async updateOne(
-        filter: FilterQuery<T>,
+        filter: Record<string, unknown>,
         data: Partial<T>,
     ): Promise<T | null> {
         return super.updateOne(
@@ -56,51 +53,26 @@ export abstract class SoftDeleteRepository<
     }
 
     override async exists(
-        filter: FilterQuery<T>,
+        filter: Record<string, unknown>,
     ): Promise<boolean> {
         return super.exists(this.buildFilter(filter));
     }
 
     override async count(
-        filter: FilterQuery<T> = {},
+        filter: Record<string, unknown> = {},
     ): Promise<number> {
         return super.count(this.buildFilter(filter));
     }
 
-    async softDelete(
-        filter: FilterQuery<T>,
+    override async softDelete(
+        filter: Record<string, unknown>,
     ): Promise<boolean> {
-        const result = await this.model.findOneAndUpdate(
-            this.buildFilter(filter),
-            {
-                deletedAt: new Date(),
-            },
-            {
-                new: true,
-            },
-        );
-
-        return !!result;
+        return super.softDelete(filter);
     }
 
-    async restore(
-        filter: FilterQuery<T>,
+    override async restore(
+        filter: Record<string, unknown>,
     ): Promise<boolean> {
-        const result = await this.model.findOneAndUpdate(
-            {
-                ...filter,
-                deletedAt: {
-                    $ne: null,
-                },
-            },
-            {
-                deletedAt: null,
-            },
-            {
-                new: true,
-            },
-        );
-
-        return !!result;
+        return super.restore(filter);
     }
 }

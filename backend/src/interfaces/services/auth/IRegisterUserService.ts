@@ -1,7 +1,7 @@
-import type{ RegisterUserDto } from "../../../dtos/auth/RegisterUser.dto";
+import type { RegisterUserDto } from "../../../dtos/auth/RegisterUser.dto";
 
 export interface IRegisterUserService {
-    register(
+    execute(
         data: RegisterUserDto,
     ): Promise<void>;
 }

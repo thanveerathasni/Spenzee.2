@@ -1,4 +1,4 @@
-import { IOtp } from "../../../models/Otp.models";
+import { type IOtp } from "../../../models/Otp.models";
 
 export interface IOtpRepository {
     create(

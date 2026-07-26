@@ -22,7 +22,8 @@ AuthService: Symbol.for("AuthService"),
     OtpService: Symbol.for("OtpService"),
     EmailService: Symbol.for("EmailService"),
     RegisterUserService: Symbol.for("RegisterUserService"),
-
+UserService: Symbol.for("UserService"),
+VerifyOtpService: Symbol.for("VerifyOtpService"),
     // Controllers
     UserController: Symbol.for("UserController"),
     AuthController: Symbol.for("AuthController"),

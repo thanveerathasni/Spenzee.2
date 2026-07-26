@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, type Types } from "mongoose";
 import { CommerceStatus } from "../shared/enums/CommerceStatus";
 import { ProviderStatus } from "../shared/enums/ProviderStatus";
 

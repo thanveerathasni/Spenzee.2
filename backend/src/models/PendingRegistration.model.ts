@@ -1,6 +1,6 @@
 import mongoose, {
-  Document,
-  Model,
+  type Document,
+  type Model,
   Schema,
 } from "mongoose";
 

@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, type Types } from "mongoose";
 import { VerificationStatus } from "../shared/enums/VerificationStatus";
 
 export interface IProviderVerification {

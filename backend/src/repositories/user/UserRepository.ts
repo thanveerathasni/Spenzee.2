@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 
 import { SoftDeleteRepository } from "../base/SoftDeleteRepository";
 
-import { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
+import type { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
 
 import {
     IUser,

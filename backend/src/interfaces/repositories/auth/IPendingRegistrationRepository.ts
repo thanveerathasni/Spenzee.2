@@ -1,4 +1,4 @@
-import { IPendingRegistration } from "../../../models/PendingRegistration.model";
+import { type IPendingRegistration } from "../../../models/PendingRegistration.model";
 
 
 export interface IPendingRegistrationRepository {
@@ -29,7 +29,7 @@ email:string,
 
   deleteByEmail(
     email: string,
-  ): Promise<void>;
+  ): Promise<boolean>;
 
 }
 

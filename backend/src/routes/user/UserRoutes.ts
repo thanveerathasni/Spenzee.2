@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { container } from "../../container/container";
+import { container } from "../../container/index";
 import { TYPES } from "../../container/types";
 import { type IUserController } from "../../interfaces/controllers/user/IUserController";
 const router = Router();
