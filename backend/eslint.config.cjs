@@ -23,7 +23,7 @@ module.exports = [
     },
 
     rules: {
-      "no-console": "off",
+      "no-console": "error",
       "no-debugger": "error",
       "prefer-const": "error",
       "no-var": "error",
