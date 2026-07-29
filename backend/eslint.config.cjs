@@ -1,8 +1,9 @@
-const tseslint = require("@typescript-eslint/eslint-plugin");
-const parser = require("@typescript-eslint/parser");
-const prettier = require("eslint-config-prettier");
+import tseslint from "@typescript-eslint/eslint-plugin";
+import parser from "@typescript-eslint/parser";
+import importPlugin from "eslint-plugin-import";
+import prettier from "eslint-config-prettier";
 
-module.exports = [
+export default [
   {
     ignores: ["dist/**", "node_modules/**", "coverage/**"],
   },
@@ -20,16 +21,38 @@ module.exports = [
 
     plugins: {
       "@typescript-eslint": tseslint,
+      import: importPlugin,
     },
 
     rules: {
+      // General
       "no-console": "error",
       "no-debugger": "error",
       "prefer-const": "error",
       "no-var": "error",
-
       "no-unused-vars": "off",
 
+      // Import order
+      "import/order": [
+        "error",
+        {
+          "newlines-between": "always",
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            ["parent", "sibling", "index"],
+            "object",
+            "type",
+          ],
+        },
+      ],
+
+      // TypeScript
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
