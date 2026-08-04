@@ -13,6 +13,8 @@ export const ERROR_MESSAGES = {
 
   INVALID_TOKEN: "Invalid token.",
 
+  INVALID_RESET_TOKEN: "Invalid or expired password reset token.",
+
   FORBIDDEN: "Access denied.",
 
   USER_NOT_FOUND: "User not found.",

@@ -7,4 +7,5 @@ export interface IAuthController {
   refreshToken: RequestHandler;
   logout: RequestHandler;
   forgotPassword: RequestHandler;
+  resetPassword: RequestHandler;
 }

@@ -8,6 +8,7 @@ import type { ILoginService } from "../../interfaces/services/auth/ILoginService
 import type { IRefreshTokenService } from "../../interfaces/services/auth/IRefreshTokenService";
 import type { ILogoutService } from "../../interfaces/services/auth/ILogoutService";
 import type { IForgotPasswordService } from "../../interfaces/services/auth/IForgotPasswordService";
+import type { IResetPasswordService } from "../../interfaces/services/auth/IResetPasswordService";
 import { TYPES } from "../../container/types";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
 import { asyncHandler } from "../../shared/utils/asyncHandler";
@@ -35,6 +36,9 @@ export class AuthController implements IAuthController {
 
     @inject(TYPES.ForgotPasswordService)
     private readonly forgotPasswordService: IForgotPasswordService,
+
+    @inject(TYPES.ResetPasswordService)
+    private readonly resetPasswordService: IResetPasswordService,
   ) {}
 
   register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
@@ -76,5 +80,11 @@ export class AuthController implements IAuthController {
     await this.forgotPasswordService.execute(req.body);
 
     successResponse(res, HTTP_STATUS.OK, AUTH_MESSAGES.PASSWORD_RESET_REQUEST_ACCEPTED);
+  });
+
+  resetPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    await this.resetPasswordService.execute(req.body);
+
+    successResponse(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS);
   });
 }

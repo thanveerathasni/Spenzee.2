@@ -31,5 +31,7 @@ export const LOG_MESSAGES = {
 
   PASSWORD_RESET_FAILED: "Password reset request failed.",
 
+  PASSWORD_RESET_COMPLETED: "Password reset completed.",
+
   USER_LOGGED_OUT: "User logged out.",
 } as const;

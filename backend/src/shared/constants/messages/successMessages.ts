@@ -11,5 +11,7 @@ export const SUCCESS_MESSAGES = {
 
   LOGOUT_SUCCESS: "Logout successful.",
 
+  PASSWORD_RESET_SUCCESS: "Password reset successfully.",
+
   DATA_FETCHED: "Data fetched successfully.",
 } as const;

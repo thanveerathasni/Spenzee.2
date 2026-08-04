@@ -13,6 +13,7 @@ import { loginSchema } from "../../validators/auth/LoginValidator";
 import { refreshTokenSchema } from "../../validators/auth/RefreshTokenValidator";
 import { logoutSchema } from "../../validators/auth/LogoutValidator";
 import { forgotPasswordSchema } from "../../validators/auth/ForgotPasswordValidator";
+import { resetPasswordSchema } from "../../validators/auth/ResetPasswordValidator";
 const router = Router();
 
 const authController = container.get<IAuthController>(TYPES.AuthController);
@@ -28,5 +29,7 @@ router.post("/refresh-token", validate(refreshTokenSchema), authController.refre
 router.post("/logout", validate(logoutSchema), authController.logout);
 
 router.post("/forgot-password", validate(forgotPasswordSchema), authController.forgotPassword);
+
+router.post("/reset-password", validate(resetPasswordSchema), authController.resetPassword);
 
 export default router;

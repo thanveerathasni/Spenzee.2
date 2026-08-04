@@ -21,4 +21,12 @@ export class ResetPasswordTokenRepository
       { new: true, upsert: true, setDefaultsOnInsert: true },
     );
   }
+
+  async findByEmail(email: string): Promise<IResetPasswordToken | null> {
+    return this.model.findOne({ email });
+  }
+
+  async deleteByEmail(email: string): Promise<boolean> {
+    return this.forceDelete({ email });
+  }
 }
