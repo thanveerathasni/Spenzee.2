@@ -3,6 +3,7 @@ import type { Container } from "inversify";
 import { TYPES } from "../types";
 
 import type { IAuthController } from "../../interfaces/controllers/auth/IAuthController";
+import type { IAuthMiddleware } from "../../interfaces/middlewares/IAuthMiddleware";
 
 import type { IPendingRegistrationRepository } from "../../interfaces/repositories/auth/IPendingRegistrationRepository";
 import type { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
@@ -28,6 +29,7 @@ import { JwtService } from "../../services/auth/JwtService";
 import { LoginService } from "../../services/auth/LoginService";
 
 import { AuthController } from "../../controllers/auth/AuthController";
+import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 
 export function registerAuthBindings(container: Container): void {
   container
@@ -45,6 +47,8 @@ export function registerAuthBindings(container: Container): void {
   container.bind<IJwtService>(TYPES.JwtService).to(JwtService);
 
   container.bind<ILoginService>(TYPES.LoginService).to(LoginService);
+
+  container.bind<IAuthMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
 
   container.bind<IAuthController>(TYPES.AuthController).to(AuthController);
 

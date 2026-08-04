@@ -5,6 +5,10 @@ export const ERROR_MESSAGES = {
 
   UNAUTHORIZED: "Unauthorized access.",
 
+  AUTH_TOKEN_MISSING: "Authentication token is required.",
+
+  INVALID_AUTH_HEADER: "Authorization header must use the Bearer token format.",
+
   TOKEN_EXPIRED: "Token has expired.",
 
   INVALID_TOKEN: "Invalid token.",

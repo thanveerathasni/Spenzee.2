@@ -19,5 +19,7 @@ export const LOG_MESSAGES = {
 
   INVALID_TOKEN: "JWT verification failed: invalid token.",
 
+  AUTH_TOKEN_MISSING: "Authentication failed: token missing.",
+
   USER_LOGGED_OUT: "User logged out.",
 } as const;
