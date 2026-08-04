@@ -5,6 +5,10 @@ export const ERROR_MESSAGES = {
 
   UNAUTHORIZED: "Unauthorized access.",
 
+  TOKEN_EXPIRED: "Token has expired.",
+
+  INVALID_TOKEN: "Invalid token.",
+
   FORBIDDEN: "Access denied.",
 
   USER_NOT_FOUND: "User not found.",

@@ -24,4 +24,6 @@ export const env = {
   MONGO_URI: getEnv("MONGO_URI"),
   JWT_ACCESS_SECRET: getEnv("JWT_ACCESS_SECRET"),
   JWT_REFRESH_SECRET: getEnv("JWT_REFRESH_SECRET"),
+  JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN ?? "15m",
+  JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN ?? "7d",
 } as const;
