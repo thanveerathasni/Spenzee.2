@@ -1,6 +1,9 @@
+import type { UserRole } from "../../../shared/enums/UserRole";
+
 export interface JwtPayload {
   userId: string;
   email: string;
+  role: UserRole;
 }
 
 export interface DecodedTokenPayload extends JwtPayload {

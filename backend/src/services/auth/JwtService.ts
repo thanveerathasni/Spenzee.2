@@ -19,6 +19,7 @@ import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
 import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
 import { LOG_MESSAGES } from "../../shared/constants/messages/logMessages";
 import { AppError } from "../../shared/errors/AppError";
+import { UserRole } from "../../shared/enums/UserRole";
 import type { ILogger } from "../../shared/logger/ILogger";
 import { inject } from "inversify";
 
@@ -116,7 +117,8 @@ export class JwtService implements IJwtService {
       !payload ||
       typeof payload === "string" ||
       typeof payload.userId !== "string" ||
-      typeof payload.email !== "string"
+      typeof payload.email !== "string" ||
+      !Object.values(UserRole).includes(payload.role as UserRole)
     ) {
       return null;
     }
@@ -124,6 +126,7 @@ export class JwtService implements IJwtService {
     return {
       userId: payload.userId,
       email: payload.email,
+      role: payload.role as UserRole,
       iat: payload.iat,
       exp: payload.exp,
     };

@@ -12,6 +12,7 @@ import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
 import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
 import { LOG_MESSAGES } from "../../shared/constants/messages/logMessages";
 import { AppError } from "../../shared/errors/AppError";
+import { UserRole } from "../../shared/enums/UserRole";
 
 @injectable()
 export class LoginService implements ILoginService {
@@ -86,7 +87,7 @@ export class LoginService implements ILoginService {
 
     const userId = userObjectId.toString();
 
-    const payload = { userId, email: user.email };
+    const payload = { userId, email: user.email, role: UserRole.USER };
     const accessToken = this.jwtService.generateAccessToken(payload);
     const refreshToken = this.jwtService.generateRefreshToken(payload);
 
