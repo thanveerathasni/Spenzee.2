@@ -27,6 +27,7 @@ export const TYPES = {
   LogoutService: Symbol.for("LogoutService"),
   ForgotPasswordService: Symbol.for("ForgotPasswordService"),
   ResetPasswordService: Symbol.for("ResetPasswordService"),
+  ChangePasswordService: Symbol.for("ChangePasswordService"),
   AuthMiddleware: Symbol.for("AuthMiddleware"),
   // Controllers
   UserController: Symbol.for("UserController"),

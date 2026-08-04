@@ -4,6 +4,7 @@ import { container } from "../../container";
 import { TYPES } from "../../container/types";
 
 import type { IAuthController } from "../../interfaces/controllers/auth/IAuthController";
+import type { IAuthMiddleware } from "../../interfaces/middlewares/IAuthMiddleware";
 
 import { validate } from "../../middlewares/validate";
 
@@ -14,9 +15,11 @@ import { refreshTokenSchema } from "../../validators/auth/RefreshTokenValidator"
 import { logoutSchema } from "../../validators/auth/LogoutValidator";
 import { forgotPasswordSchema } from "../../validators/auth/ForgotPasswordValidator";
 import { resetPasswordSchema } from "../../validators/auth/ResetPasswordValidator";
+import { changePasswordSchema } from "../../validators/auth/ChangePasswordValidator";
 const router = Router();
 
 const authController = container.get<IAuthController>(TYPES.AuthController);
+const authMiddleware = container.get<IAuthMiddleware>(TYPES.AuthMiddleware);
 
 router.post("/register", validate(registerUserSchema), authController.register);
 
@@ -31,5 +34,12 @@ router.post("/logout", validate(logoutSchema), authController.logout);
 router.post("/forgot-password", validate(forgotPasswordSchema), authController.forgotPassword);
 
 router.post("/reset-password", validate(resetPasswordSchema), authController.resetPassword);
+
+router.post(
+  "/change-password",
+  authMiddleware.authenticate,
+  validate(changePasswordSchema),
+  authController.changePassword,
+);
 
 export default router;

@@ -33,5 +33,9 @@ export const LOG_MESSAGES = {
 
   PASSWORD_RESET_COMPLETED: "Password reset completed.",
 
+  PASSWORD_CHANGE_FAILED: "Password change failed.",
+
+  PASSWORD_CHANGED: "Password changed successfully.",
+
   USER_LOGGED_OUT: "User logged out.",
 } as const;

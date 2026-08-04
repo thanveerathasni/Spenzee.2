@@ -21,6 +21,7 @@ import type { IRefreshTokenService } from "../../interfaces/services/auth/IRefre
 import type { ILogoutService } from "../../interfaces/services/auth/ILogoutService";
 import type { IForgotPasswordService } from "../../interfaces/services/auth/IForgotPasswordService";
 import type { IResetPasswordService } from "../../interfaces/services/auth/IResetPasswordService";
+import type { IChangePasswordService } from "../../interfaces/services/auth/IChangePasswordService";
 
 import { PendingRegistrationRepository } from "../../repositories/auth/PendingRegistrationRepository";
 import { OtpRepository } from "../../repositories/auth/OtpRepository";
@@ -37,6 +38,7 @@ import { RefreshTokenService } from "../../services/auth/RefreshTokenService";
 import { LogoutService } from "../../services/auth/LogoutService";
 import { ForgotPasswordService } from "../../services/auth/ForgotPasswordService";
 import { ResetPasswordService } from "../../services/auth/ResetPasswordService";
+import { ChangePasswordService } from "../../services/auth/ChangePasswordService";
 
 import { AuthController } from "../../controllers/auth/AuthController";
 import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
@@ -69,6 +71,8 @@ export function registerAuthBindings(container: Container): void {
   container.bind<IForgotPasswordService>(TYPES.ForgotPasswordService).to(ForgotPasswordService);
 
   container.bind<IResetPasswordService>(TYPES.ResetPasswordService).to(ResetPasswordService);
+
+  container.bind<IChangePasswordService>(TYPES.ChangePasswordService).to(ChangePasswordService);
 
   container.bind<IAuthMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
 

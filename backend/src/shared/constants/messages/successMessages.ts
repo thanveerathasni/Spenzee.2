@@ -13,5 +13,7 @@ export const SUCCESS_MESSAGES = {
 
   PASSWORD_RESET_SUCCESS: "Password reset successfully.",
 
+  PASSWORD_CHANGED_SUCCESS: "Password changed successfully.",
+
   DATA_FETCHED: "Data fetched successfully.",
 } as const;
