@@ -25,5 +25,7 @@ export const LOG_MESSAGES = {
 
   REFRESH_TOKEN_ROTATED: "Refresh token rotated successfully.",
 
+  LOGOUT_FAILED: "Logout failed.",
+
   USER_LOGGED_OUT: "User logged out.",
 } as const;

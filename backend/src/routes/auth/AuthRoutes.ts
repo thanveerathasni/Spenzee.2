@@ -11,6 +11,7 @@ import { registerUserSchema } from "../../validators/auth/registerUser.validator
 import { verifyOtpSchema } from "../../validators/auth/verifyOtp.validator";
 import { loginSchema } from "../../validators/auth/LoginValidator";
 import { refreshTokenSchema } from "../../validators/auth/RefreshTokenValidator";
+import { logoutSchema } from "../../validators/auth/LogoutValidator";
 const router = Router();
 
 const authController = container.get<IAuthController>(TYPES.AuthController);
@@ -22,5 +23,7 @@ router.post("/verify-otp", validate(verifyOtpSchema), authController.verifyOtp);
 router.post("/login", validate(loginSchema), authController.login);
 
 router.post("/refresh-token", validate(refreshTokenSchema), authController.refreshToken);
+
+router.post("/logout", validate(logoutSchema), authController.logout);
 
 export default router;
