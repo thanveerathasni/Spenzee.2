@@ -3,22 +3,22 @@ import type { ZodSchema } from "zod";
 
 import { ZodError } from "zod";
 
-export const validate =
-    (schema: ZodSchema) =>
-    (req: Request, res: Response, next: NextFunction): void => {
-        try {
-            req.body = schema.parse(req.body);
-            next();
-        } catch (error) {
-            if (error instanceof ZodError) {
-                res.status(400).json({
-                    success: false,
-                    message: "Validation failed.",
-                    errors: error.issues,
-                });
-                return;
-            }
+import { HTTP_STATUS } from "../shared/constants/status/httpStatus";
+import { ERROR_MESSAGES } from "../shared/constants/messages/errorMessages";
+import { errorResponse } from "../shared/responses/errorResponse";
 
-            next(error);
-        }
-    };
+export const validate =
+  (schema: ZodSchema) =>
+  (req: Request, res: Response, next: NextFunction): void => {
+    try {
+      req.body = schema.parse(req.body);
+      next();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        errorResponse(res, HTTP_STATUS.BAD_REQUEST, ERROR_MESSAGES.VALIDATION_FAILED, error.issues);
+        return;
+      }
+
+      next(error);
+    }
+  };

@@ -37,5 +37,11 @@ export const LOG_MESSAGES = {
 
   PASSWORD_CHANGED: "Password changed successfully.",
 
+  OTP_SENT: "Registration OTP sent.",
+
+  OTP_VERIFICATION_FAILED: "OTP verification failed.",
+
+  OTP_VERIFIED: "OTP verified successfully.",
+
   USER_LOGGED_OUT: "User logged out.",
 } as const;

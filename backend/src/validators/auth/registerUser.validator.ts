@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { strongPasswordSchema } from "./password.schema";
+
 export const registerUserSchema = z.object({
   firstName: z
     .string()
@@ -13,19 +15,9 @@ export const registerUserSchema = z.object({
     .min(2, "Last name must be at least 2 characters.")
     .max(50, "Last name cannot exceed 50 characters."),
 
-  email: z
-    .email("Invalid email address.")
-    .trim()
-    .toLowerCase(),
+  email: z.email("Invalid email address.").trim().toLowerCase(),
 
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters.")
-    .max(128, "Password cannot exceed 128 characters.")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#()[\]{}\-_=+|\\:;"'<>,./~`]).+$/,
-      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
-    ),
+  password: strongPasswordSchema,
 });
 
 export type RegisterUserDto = z.infer<typeof registerUserSchema>;
