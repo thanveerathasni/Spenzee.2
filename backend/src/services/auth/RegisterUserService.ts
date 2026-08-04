@@ -3,9 +3,9 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../container/types";
 
 import { RegisterUserDto } from "../../dtos/auth/RegisterUser.dto";
-
+import { container } from "../../container/index";
 import { IRegisterUserService } from "../../interfaces/services/auth/IRegisterUserService";
-
+import { ILogger } from "../../shared/logger/ILogger";
 import { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
 import { IPendingRegistrationRepository } from "../../interfaces/repositories/auth/IPendingRegistrationRepository";
 import { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
@@ -13,7 +13,7 @@ import { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepositor
 import { IPasswordService } from "../../interfaces/services/auth/IPasswordService";
 import { IOtpService } from "../../interfaces/services/auth/IOtpService";
 import { IEmailService } from "../../interfaces/services/email/IEmailService";
-
+const logger = container.get<ILogger>(TYPES.Logger);
 @injectable()
 export class RegisterUserService
     implements IRegisterUserService
@@ -104,8 +104,7 @@ await this.emailService.sendOtp(
     data.email,
     otp,
 );
-console.log("Generated OTP:", otp);
-
+logger.debug({ otp }, "Generated OTP.");
     }
 }
 
