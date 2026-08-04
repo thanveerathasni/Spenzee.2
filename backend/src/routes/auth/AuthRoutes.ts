@@ -12,6 +12,7 @@ import { verifyOtpSchema } from "../../validators/auth/verifyOtp.validator";
 import { loginSchema } from "../../validators/auth/LoginValidator";
 import { refreshTokenSchema } from "../../validators/auth/RefreshTokenValidator";
 import { logoutSchema } from "../../validators/auth/LogoutValidator";
+import { forgotPasswordSchema } from "../../validators/auth/ForgotPasswordValidator";
 const router = Router();
 
 const authController = container.get<IAuthController>(TYPES.AuthController);
@@ -25,5 +26,7 @@ router.post("/login", validate(loginSchema), authController.login);
 router.post("/refresh-token", validate(refreshTokenSchema), authController.refreshToken);
 
 router.post("/logout", validate(logoutSchema), authController.logout);
+
+router.post("/forgot-password", validate(forgotPasswordSchema), authController.forgotPassword);
 
 export default router;

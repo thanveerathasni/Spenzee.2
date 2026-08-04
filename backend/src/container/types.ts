@@ -12,6 +12,7 @@ export const TYPES = {
   PendingRegistrationRepository: Symbol.for("PendingRegistrationRepository"),
   OtpRepository: Symbol.for("OtpRepository"),
   RefreshTokenRepository: Symbol.for("RefreshTokenRepository"),
+  ResetPasswordTokenRepository: Symbol.for("ResetPasswordTokenRepository"),
 
   // Services
   PasswordService: Symbol.for("PasswordService"),
@@ -24,6 +25,7 @@ export const TYPES = {
   LoginService: Symbol.for("LoginService"),
   RefreshTokenService: Symbol.for("RefreshTokenService"),
   LogoutService: Symbol.for("LogoutService"),
+  ForgotPasswordService: Symbol.for("ForgotPasswordService"),
   AuthMiddleware: Symbol.for("AuthMiddleware"),
   // Controllers
   UserController: Symbol.for("UserController"),

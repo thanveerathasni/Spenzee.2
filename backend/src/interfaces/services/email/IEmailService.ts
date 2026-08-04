@@ -1,6 +1,5 @@
 export interface IEmailService {
-    sendOtp(
-        email: string,
-        otp: string,
-    ): Promise<void>;
+  sendOtp(email: string, otp: string): Promise<void>;
+
+  sendPasswordResetEmail(email: string, resetToken: string): Promise<void>;
 }

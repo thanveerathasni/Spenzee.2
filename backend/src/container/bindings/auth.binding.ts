@@ -8,6 +8,7 @@ import type { IAuthMiddleware } from "../../interfaces/middlewares/IAuthMiddlewa
 import type { IPendingRegistrationRepository } from "../../interfaces/repositories/auth/IPendingRegistrationRepository";
 import type { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
 import type { IRefreshTokenRepository } from "../../interfaces/repositories/auth/IRefreshTokenRepository";
+import type { IResetPasswordTokenRepository } from "../../interfaces/repositories/auth/IResetPasswordTokenRepository";
 
 import type { IRegisterUserService } from "../../interfaces/services/auth/IRegisterUserService";
 import type { IVerifyOtpService } from "../../interfaces/services/auth/IVerifyOtpService";
@@ -18,10 +19,12 @@ import type { IJwtService } from "../../interfaces/services/auth/IJwtService";
 import type { ILoginService } from "../../interfaces/services/auth/ILoginService";
 import type { IRefreshTokenService } from "../../interfaces/services/auth/IRefreshTokenService";
 import type { ILogoutService } from "../../interfaces/services/auth/ILogoutService";
+import type { IForgotPasswordService } from "../../interfaces/services/auth/IForgotPasswordService";
 
 import { PendingRegistrationRepository } from "../../repositories/auth/PendingRegistrationRepository";
 import { OtpRepository } from "../../repositories/auth/OtpRepository";
 import { RefreshTokenRepository } from "../../repositories/auth/RefreshTokenRepository";
+import { ResetPasswordTokenRepository } from "../../repositories/auth/ResetPasswordTokenRepository";
 import { PasswordService } from "../../services/auth/PasswordService";
 import { OtpService } from "../../services/auth/OtpService";
 import { EmailService } from "../../services/email/EmailService";
@@ -31,6 +34,7 @@ import { JwtService } from "../../services/auth/JwtService";
 import { LoginService } from "../../services/auth/LoginService";
 import { RefreshTokenService } from "../../services/auth/RefreshTokenService";
 import { LogoutService } from "../../services/auth/LogoutService";
+import { ForgotPasswordService } from "../../services/auth/ForgotPasswordService";
 
 import { AuthController } from "../../controllers/auth/AuthController";
 import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
@@ -44,6 +48,10 @@ export function registerAuthBindings(container: Container): void {
 
   container.bind<IRefreshTokenRepository>(TYPES.RefreshTokenRepository).to(RefreshTokenRepository);
 
+  container
+    .bind<IResetPasswordTokenRepository>(TYPES.ResetPasswordTokenRepository)
+    .to(ResetPasswordTokenRepository);
+
   container.bind<IRegisterUserService>(TYPES.RegisterUserService).to(RegisterUserService);
 
   container.bind<IVerifyOtpService>(TYPES.VerifyOtpService).to(VerifyOtpService);
@@ -55,6 +63,8 @@ export function registerAuthBindings(container: Container): void {
   container.bind<IRefreshTokenService>(TYPES.RefreshTokenService).to(RefreshTokenService);
 
   container.bind<ILogoutService>(TYPES.LogoutService).to(LogoutService);
+
+  container.bind<IForgotPasswordService>(TYPES.ForgotPasswordService).to(ForgotPasswordService);
 
   container.bind<IAuthMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
 
