@@ -5,6 +5,7 @@ import type { IAuthController } from "../../interfaces/controllers/auth/IAuthCon
 import type { IRegisterUserService } from "../../interfaces/services/auth/IRegisterUserService";
 import type { IVerifyOtpService } from "../../interfaces/services/auth/IVerifyOtpService";
 import type { ILoginService } from "../../interfaces/services/auth/ILoginService";
+import type { IRefreshTokenService } from "../../interfaces/services/auth/IRefreshTokenService";
 import { TYPES } from "../../container/types";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
 import { asyncHandler } from "../../shared/utils/asyncHandler";
@@ -23,6 +24,9 @@ export class AuthController implements IAuthController {
 
     @inject(TYPES.LoginService)
     private readonly loginService: ILoginService,
+
+    @inject(TYPES.RefreshTokenService)
+    private readonly refreshTokenService: IRefreshTokenService,
   ) {}
 
   register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
@@ -41,5 +45,16 @@ export class AuthController implements IAuthController {
     const loginResponse = await this.loginService.execute(req.body);
 
     successResponse(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.LOGIN_SUCCESS, loginResponse);
+  });
+
+  refreshToken = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const refreshTokenResponse = await this.refreshTokenService.execute(req.body);
+
+    successResponse(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGES.REFRESH_TOKEN_SUCCESS,
+      refreshTokenResponse,
+    );
   });
 }

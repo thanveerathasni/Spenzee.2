@@ -5,4 +5,8 @@ export interface IRefreshTokenRepository extends IBaseRepository<IRefreshToken> 
   store(
     refreshToken: Pick<IRefreshToken, "userId" | "userType" | "token" | "expiresAt">,
   ): Promise<IRefreshToken>;
+
+  findByToken(token: string): Promise<IRefreshToken | null>;
+
+  deleteByToken(token: string): Promise<boolean>;
 }

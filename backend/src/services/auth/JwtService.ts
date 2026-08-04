@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { injectable } from "inversify";
 import jwt, {
   JsonWebTokenError,
@@ -39,6 +41,7 @@ export class JwtService implements IJwtService {
   generateRefreshToken(payload: JwtPayload): GeneratedRefreshToken {
     const token = jwt.sign(payload, env.JWT_REFRESH_SECRET, {
       expiresIn: env.JWT_REFRESH_EXPIRES_IN as SignOptions["expiresIn"],
+      jwtid: randomUUID(),
     } as SignOptions);
 
     return {

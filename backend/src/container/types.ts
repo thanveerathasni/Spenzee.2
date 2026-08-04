@@ -22,6 +22,7 @@ export const TYPES = {
   VerifyOtpService: Symbol.for("VerifyOtpService"),
   JwtService: Symbol.for("JwtService"),
   LoginService: Symbol.for("LoginService"),
+  RefreshTokenService: Symbol.for("RefreshTokenService"),
   AuthMiddleware: Symbol.for("AuthMiddleware"),
   // Controllers
   UserController: Symbol.for("UserController"),

@@ -7,6 +7,8 @@ export const SUCCESS_MESSAGES = {
 
   LOGIN_SUCCESS: "Login successful.",
 
+  REFRESH_TOKEN_SUCCESS: "Token refreshed successfully.",
+
   LOGOUT_SUCCESS: "Logout successful.",
 
   DATA_FETCHED: "Data fetched successfully.",

@@ -19,4 +19,12 @@ export class RefreshTokenRepository
   ): Promise<IRefreshToken> {
     return this.create(refreshToken);
   }
+
+  async findByToken(token: string): Promise<IRefreshToken | null> {
+    return this.model.findOne({ token });
+  }
+
+  async deleteByToken(token: string): Promise<boolean> {
+    return this.forceDelete({ token });
+  }
 }

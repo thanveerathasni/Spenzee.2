@@ -16,6 +16,7 @@ import type { IOtpService } from "../../interfaces/services/auth/IOtpService";
 import type { IEmailService } from "../../interfaces/services/email/IEmailService";
 import type { IJwtService } from "../../interfaces/services/auth/IJwtService";
 import type { ILoginService } from "../../interfaces/services/auth/ILoginService";
+import type { IRefreshTokenService } from "../../interfaces/services/auth/IRefreshTokenService";
 
 import { PendingRegistrationRepository } from "../../repositories/auth/PendingRegistrationRepository";
 import { OtpRepository } from "../../repositories/auth/OtpRepository";
@@ -27,6 +28,7 @@ import { RegisterUserService } from "../../services/auth/RegisterUserService";
 import { VerifyOtpService } from "../../services/auth/VerifyOtpService";
 import { JwtService } from "../../services/auth/JwtService";
 import { LoginService } from "../../services/auth/LoginService";
+import { RefreshTokenService } from "../../services/auth/RefreshTokenService";
 
 import { AuthController } from "../../controllers/auth/AuthController";
 import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
@@ -47,6 +49,8 @@ export function registerAuthBindings(container: Container): void {
   container.bind<IJwtService>(TYPES.JwtService).to(JwtService);
 
   container.bind<ILoginService>(TYPES.LoginService).to(LoginService);
+
+  container.bind<IRefreshTokenService>(TYPES.RefreshTokenService).to(RefreshTokenService);
 
   container.bind<IAuthMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
 

@@ -21,5 +21,9 @@ export const LOG_MESSAGES = {
 
   AUTH_TOKEN_MISSING: "Authentication failed: token missing.",
 
+  REFRESH_TOKEN_FAILED: "Refresh token authentication failed.",
+
+  REFRESH_TOKEN_ROTATED: "Refresh token rotated successfully.",
+
   USER_LOGGED_OUT: "User logged out.",
 } as const;
