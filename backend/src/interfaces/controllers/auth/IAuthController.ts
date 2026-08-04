@@ -5,4 +5,5 @@ export interface IAuthController {
   verifyOtp: RequestHandler;
   login: RequestHandler;
   refreshToken: RequestHandler;
+  logout: RequestHandler;
 }
