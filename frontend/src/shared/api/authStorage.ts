@@ -1,5 +1,6 @@
-import { STORAGE_KEYS } from "@/shared/constants";
 import type { AuthSession } from "@/shared/types";
+
+import { STORAGE_KEYS } from "@/shared/constants";
 
 export const authStorage = {
   getSession(): AuthSession | null {

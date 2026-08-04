@@ -1,7 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-import { ROUTES } from "@/shared/constants";
 import type { UserRole } from "@/shared/types";
+
+import { ROUTES } from "@/shared/constants";
 import { useAppSelector } from "@/store";
 
 interface RoleRouteProps {
@@ -11,5 +12,9 @@ interface RoleRouteProps {
 export function RoleRoute({ allowedRoles }: RoleRouteProps): React.JSX.Element {
   const role = useAppSelector((state) => state.auth.user?.role);
 
-  return role && allowedRoles.includes(role) ? <Outlet /> : <Navigate replace to={ROUTES.DASHBOARD} />;
+  return role && allowedRoles.includes(role) ? (
+    <Outlet />
+  ) : (
+    <Navigate replace to={ROUTES.UNAUTHORIZED} />
+  );
 }

@@ -1,1 +1,2 @@
-export * from "./AppLayout";
+export { AppLayout } from "./AppLayout";
+export { AuthLayout } from "./AuthLayout";

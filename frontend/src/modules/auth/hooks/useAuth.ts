@@ -1,6 +1,7 @@
+import { selectAuthUser, selectIsAuthenticated } from "../redux/authSelectors";
+
 import { useAppSelector } from "@/store";
 
-import { selectAuthUser, selectIsAuthenticated } from "../redux/authSelectors";
 
 export function useAuth(): { isAuthenticated: boolean; user: ReturnType<typeof selectAuthUser> } {
   return {

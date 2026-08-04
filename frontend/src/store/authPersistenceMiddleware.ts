@@ -1,8 +1,9 @@
 import { createListenerMiddleware } from "@reduxjs/toolkit";
 
+import { clearSession, setSession } from "./authSlice";
+
 import { authStorage } from "@/shared/api";
 
-import { clearSession, setSession } from "./authSlice";
 
 export const authPersistenceMiddleware = createListenerMiddleware();
 

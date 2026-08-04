@@ -12,9 +12,13 @@ interface NotificationState {
   items: Notification[];
 }
 
+const initialState: NotificationState = {
+  items: [],
+};
+
 const notificationSlice = createSlice({
   name: "notification",
-  initialState: { items: [] } satisfies NotificationState,
+  initialState,
   reducers: {
     addNotification: {
       prepare: (message: string, type: NotificationType): { payload: Notification } => ({

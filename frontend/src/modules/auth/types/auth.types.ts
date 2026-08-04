@@ -1,5 +1,21 @@
 import type { AuthSession } from "@/shared/types";
 
+export interface RegisterRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+export interface VerifyOtpRequest {
+  email: string;
+  otp: string;
+}
+
+export interface ResendOtpRequest {
+  email: string;
+}
+
 export interface LoginRequest {
   email: string;
   password: string;

@@ -1,4 +1,4 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const apiBaseUrl = String(import.meta.env.VITE_API_BASE_URL ?? "");
 
 if (!apiBaseUrl) {
   throw new Error("VITE_API_BASE_URL is required.");
@@ -6,5 +6,5 @@ if (!apiBaseUrl) {
 
 export const env = {
   API_BASE_URL: apiBaseUrl,
-  IS_PRODUCTION: import.meta.env.PROD,
+  IS_PRODUCTION: Boolean(import.meta.env.PROD),
 } as const;

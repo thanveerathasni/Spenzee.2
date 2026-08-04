@@ -6,9 +6,13 @@ interface ThemeState {
   mode: Theme;
 }
 
+const initialState: ThemeState = {
+  mode: "system",
+};
+
 const themeSlice = createSlice({
   name: "theme",
-  initialState: { mode: "system" } satisfies ThemeState,
+  initialState,
   reducers: {
     setTheme: (state, action: PayloadAction<Theme>) => {
       state.mode = action.payload;

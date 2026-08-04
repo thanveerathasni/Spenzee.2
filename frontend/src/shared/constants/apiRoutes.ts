@@ -3,6 +3,7 @@ export const API_ROUTES = {
     LOGIN: "/auth/login",
     REGISTER: "/auth/register",
     VERIFY_OTP: "/auth/verify-otp",
+    RESEND_OTP: "/auth/resend-otp",
     REFRESH_TOKEN: "/auth/refresh-token",
     LOGOUT: "/auth/logout",
     FORGOT_PASSWORD: "/auth/forgot-password",

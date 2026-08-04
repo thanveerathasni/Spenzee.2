@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import { configureInterceptors, apiClient } from "@/shared/api";
 
-import { authReducer } from "./authSlice";
 import { authPersistenceMiddleware } from "./authPersistenceMiddleware";
+import { authReducer } from "./authSlice";
 import { notificationReducer } from "./notificationSlice";
 import { themeReducer } from "./themeSlice";
 import { userReducer } from "./userSlice";
+
+import { configureInterceptors, apiClient } from "@/shared/api";
 
 export const store = configureStore({
   reducer: {
