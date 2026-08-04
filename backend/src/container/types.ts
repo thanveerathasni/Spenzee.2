@@ -1,31 +1,28 @@
 export const TYPES = {
   Logger: Symbol.for("Logger"),
 
+  // auth  types
 
+  AuthRepository: Symbol.for("AuthRepository"),
 
-// auth  types 
+  AuthService: Symbol.for("AuthService"),
 
-AuthRepository : Symbol.for("AuthRepository"),
+  // Repositories
+  UserRepository: Symbol.for("UserRepository"),
+  PendingRegistrationRepository: Symbol.for("PendingRegistrationRepository"),
+  OtpRepository: Symbol.for("OtpRepository"),
+  RefreshTokenRepository: Symbol.for("RefreshTokenRepository"),
 
-AuthService: Symbol.for("AuthService"),
-
-
-
-
-    // Repositories
-    UserRepository: Symbol.for("UserRepository"),
-    PendingRegistrationRepository: Symbol.for("PendingRegistrationRepository"),
-    OtpRepository: Symbol.for("OtpRepository"),
-
-    // Services
-    PasswordService: Symbol.for("PasswordService"),
-    OtpService: Symbol.for("OtpService"),
-    EmailService: Symbol.for("EmailService"),
-    RegisterUserService: Symbol.for("RegisterUserService"),
-UserService: Symbol.for("UserService"),
-VerifyOtpService: Symbol.for("VerifyOtpService"),
-    // Controllers
-    UserController: Symbol.for("UserController"),
-    AuthController: Symbol.for("AuthController"),
-
+  // Services
+  PasswordService: Symbol.for("PasswordService"),
+  OtpService: Symbol.for("OtpService"),
+  EmailService: Symbol.for("EmailService"),
+  RegisterUserService: Symbol.for("RegisterUserService"),
+  UserService: Symbol.for("UserService"),
+  VerifyOtpService: Symbol.for("VerifyOtpService"),
+  JwtService: Symbol.for("JwtService"),
+  LoginService: Symbol.for("LoginService"),
+  // Controllers
+  UserController: Symbol.for("UserController"),
+  AuthController: Symbol.for("AuthController"),
 } as const;

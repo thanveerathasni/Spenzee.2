@@ -15,97 +15,80 @@ import { IOtpService } from "../../interfaces/services/auth/IOtpService";
 import { IEmailService } from "../../interfaces/services/email/IEmailService";
 const logger = container.get<ILogger>(TYPES.Logger);
 @injectable()
-export class RegisterUserService
-    implements IRegisterUserService
-{
-    constructor(
-        @inject(TYPES.UserRepository)
-        private readonly userRepository: IUserRepository,
+export class RegisterUserService implements IRegisterUserService {
+  constructor(
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: IUserRepository,
 
-        @inject(TYPES.PendingRegistrationRepository)
-        private readonly pendingRegistrationRepository: IPendingRegistrationRepository,
+    @inject(TYPES.PendingRegistrationRepository)
+    private readonly pendingRegistrationRepository: IPendingRegistrationRepository,
 
-        @inject(TYPES.OtpRepository)
-        private readonly otpRepository: IOtpRepository,
+    @inject(TYPES.OtpRepository)
+    private readonly otpRepository: IOtpRepository,
 
-        @inject(TYPES.PasswordService)
-        private readonly passwordService: IPasswordService,
+    @inject(TYPES.PasswordService)
+    private readonly passwordService: IPasswordService,
 
-        @inject(TYPES.OtpService)
-        private readonly otpService: IOtpService,
+    @inject(TYPES.OtpService)
+    private readonly otpService: IOtpService,
 
-        @inject(TYPES.EmailService)
-        private readonly emailService: IEmailService,
-    ) {}
+    @inject(TYPES.EmailService)
+    private readonly emailService: IEmailService,
+  ) {}
 
- async execute(
-    data: RegisterUserDto,
-): Promise<void> { {
+  async execute(data: RegisterUserDto): Promise<void> {
+    {
+      const existingUser = await this.userRepository.findByEmail(data.email);
+      const hashedPassword = await this.passwordService.hash(data.password);
+      const pendingRegistration = await this.pendingRegistrationRepository.findByEmail(data.email);
+      const otp = this.otpService.generateOtp();
 
-const existingUser = await this.userRepository.findByEmail(data.email)
-const hashedPassword = await this.passwordService.hash(data.password)
-const pendingRegistration = await this.pendingRegistrationRepository.findByEmail(data.email)
-const otp = this.otpService.generateOtp()
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-const expiresAt = new Date(
-    Date.now() + 10 * 60 * 1000,
-);
+      const hashedOtp = await this.otpService.hashOtp(otp);
 
-const hashedOtp = await this.otpService.hashOtp(otp)
+      const otpExpiresAt = this.otpService.getExpiryTime();
 
-const otpExpiresAt =  this.otpService.getExpiryTime()
+      const existingOtp = await this.otpRepository.findByEmail(data.email);
 
-const existingOtp = await this.otpRepository.findByEmail(data.email)
+      if (existingUser) {
+        throw new Error("user already exists");
+      }
+      if (pendingRegistration) {
+        await this.pendingRegistrationRepository.updateByEmail(data.email, {
+          firstName: data.firstName,
+          lastName: data.lastName,
 
-if(existingUser){
-    throw new Error("user already exists")
-}
-if(pendingRegistration){
-await this.pendingRegistrationRepository.updateByEmail( data.email,
-    {firstName : data.firstName,
- lastName: data.lastName,
- 
-        password: hashedPassword,
-        expiresAt,
-})
-}else{
+          password: hashedPassword,
+          expiresAt,
+        });
+      } else {
+        await this.pendingRegistrationRepository.create({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          password: hashedPassword,
+          expiresAt,
+        });
+      }
 
-await this.pendingRegistrationRepository.create({
+      if (existingOtp) {
+        await this.otpRepository.updateByEmail(data.email, {
+          code: hashedOtp,
+          expiresAt: otpExpiresAt,
+        });
+      } else {
+        await this.otpRepository.create({
+          email: data.email,
+          code: hashedOtp,
+          expiresAt: otpExpiresAt,
+        });
+      }
 
-  firstName: data.firstName,
-        lastName: data.lastName,
+      await this.emailService.sendOtp(data.email, otp);
+      logger.debug("OTP generated for pending registration.", {
         email: data.email,
-        password: hashedPassword,
-        expiresAt
-
-
-
-})
-}
-
-
-if (existingOtp) {
-    await this.otpRepository.updateByEmail(
-        data.email,
-        {
-            code: hashedOtp,
-            expiresAt: otpExpiresAt,
-        },
-    );
-}else {
-    await this.otpRepository.create({
-        email: data.email,
-        code: hashedOtp,
-        expiresAt: otpExpiresAt,
-    });
-}
-
-await this.emailService.sendOtp(
-    data.email,
-    otp,
-);
-logger.debug({ otp }, "Generated OTP.");
+      });
     }
-}
-
+  }
 }

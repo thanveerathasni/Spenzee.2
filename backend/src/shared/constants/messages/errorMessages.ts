@@ -9,6 +9,10 @@ export const ERROR_MESSAGES = {
 
   USER_NOT_FOUND: "User not found.",
 
+  USER_ACCOUNT_DELETED: "This account has been deleted.",
+
+  USER_ACCOUNT_INACTIVE: "This account is inactive.",
+
   EMAIL_ALREADY_EXISTS: "Email already exists.",
 
   VALIDATION_FAILED: "Validation failed.",

@@ -1,6 +1,7 @@
 import type { RequestHandler } from "express";
 
 export interface IAuthController {
-    register: RequestHandler;
-    verifyOtp: RequestHandler;
+  register: RequestHandler;
+  verifyOtp: RequestHandler;
+  login: RequestHandler;
 }

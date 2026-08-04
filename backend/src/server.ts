@@ -15,13 +15,13 @@ const startServer = async (): Promise<void> => {
     });
   } catch (error) {
     logger.error(" Server startup failed");
-    logger.error(error);
+    logger.error("Server startup failed.", { error });
 
     process.exit(1);
   }
 };
 
-startServer().catch((error) => {
-  logger.error("Unhandled server startup error:", error);
+startServer().catch((error: unknown) => {
+  logger.error("Unhandled server startup error.", { error });
   process.exit(1);
 });

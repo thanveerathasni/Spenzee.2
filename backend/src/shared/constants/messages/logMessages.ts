@@ -9,5 +9,11 @@ export const LOG_MESSAGES = {
 
   USER_LOGGED_IN: "User logged in.",
 
+  LOGIN_FAILED: "Login failed.",
+
+  LOGIN_INVALID_PASSWORD: "Login failed: invalid password.",
+
+  LOGIN_USER_NOT_FOUND: "Login failed: user not found.",
+
   USER_LOGGED_OUT: "User logged out.",
 } as const;
