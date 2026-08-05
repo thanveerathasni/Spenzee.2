@@ -76,7 +76,7 @@ const UserSchema = new Schema<IUser>(
   },
 );
 
-UserSchema.index({ email: 1 }, { unique: true });
+// UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ isActive: 1 });
 UserSchema.index({ createdAt: -1 });
 UserSchema.index({ deletedAt: 1 });

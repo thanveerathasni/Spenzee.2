@@ -49,7 +49,7 @@ const AdminSchema = new Schema<IAdmin>(
     }
 );
 
-AdminSchema.index({ email: 1 }, { unique: true });
+// AdminSchema.index({ email: 1 }, { unique: true });
 AdminSchema.index({ isActive: 1 });
 
 export const AdminModel = model<IAdmin>("Admin", AdminSchema);

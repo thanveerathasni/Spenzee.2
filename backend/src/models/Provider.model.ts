@@ -118,7 +118,7 @@ const ProviderSchema = new Schema<IProvider>(
     }
 );
 
-ProviderSchema.index({ email: 1 }, { unique: true });
+// ProviderSchema.index({ email: 1 }, { unique: true });
 ProviderSchema.index({ status: 1 });
 ProviderSchema.index({ commerceStatus: 1 });
 

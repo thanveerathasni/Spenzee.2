@@ -42,7 +42,7 @@ const OtpSchema = new Schema<IOtp>(
     }
 );
 
-OtpSchema.index({ email: 1 });
+// OtpSchema.index({ email: 1 });
 OtpSchema.index({
     deletedAt: 1,
 });

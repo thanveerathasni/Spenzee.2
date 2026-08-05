@@ -78,9 +78,9 @@ pendingRegistrationSchema.index(
   },
 );
 
-pendingRegistrationSchema.index({
-  email: 1,
-});
+// pendingRegistrationSchema.index({
+//   email: 1,
+// });
 
 pendingRegistrationSchema.index({
   deletedAt: 1,
