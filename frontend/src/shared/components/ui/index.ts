@@ -9,3 +9,6 @@ export { PasswordStrengthIndicator } from "./PasswordStrengthIndicator";
 export { Spinner } from "./Spinner";
 export { ThemeToggle } from "./ThemeToggle";
 export { ToastContainer } from "./ToastContainer";
+export { Divider } from "./Divider";
+export { BackButton } from "./BackButton";
+export { PageTransition } from "./PageTransition";

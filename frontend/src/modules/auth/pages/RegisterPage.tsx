@@ -1,13 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { HiEnvelope, HiLockClosed, HiUser } from "react-icons/hi2";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+import { AuthFooter, AuthHeader } from "@/modules/auth/components";
 import { authService } from "@/modules/auth/services/authService";
 import { registerSchema, type RegisterFormValues } from "@/modules/auth/validation/authSchemas";
-import { Button, Input, PasswordInput, PasswordStrengthIndicator } from "@/shared/components";
-import { ROUTES } from "@/shared/constants";
+import { Button, Input, PasswordInput, PasswordStrengthIndicator } from "@/shared/components/ui";
+import { AUTH_MESSAGES, ROUTES } from "@/shared/constants";
 import { useToast } from "@/shared/hooks";
 import { AuthLayout } from "@/shared/layouts";
 
@@ -59,99 +60,115 @@ export function RegisterPage(): React.JSX.Element {
 
   return (
     <AuthLayout
-      title="Create account"
-      subtitle="Start your journey to smarter spending."
+      editorialTagline="Start Your Journey"
+      editorialHeadingLine1="Join"
+      editorialHeadingLine2="The"
+      editorialHeadingAccent="Future."
+      editorialDescription="Create your account and start taking control of your finances in minutes."
+      stats={[
+        ["Free", "Forever"],
+        ["2 min", "Setup"],
+        ["100%", "Secure"],
+      ]}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
-        {/* API Error */}
-        {apiError && (
-          <div
-            role="alert"
-            className="flex items-center gap-2.5 px-4 py-3 rounded-[var(--radius-lg)] bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 text-sm"
-          >
-            <span className="flex-shrink-0">⚠️</span>
-            {apiError}
-          </div>
-        )}
+      <AuthHeader
+        category={AUTH_MESSAGES.REGISTER.SUBHEADING}
+        title={`Sign\nUp.`}
+      />
 
-        {/* Name row */}
-        <div className="grid grid-cols-2 gap-3">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-0 w-full" noValidate>
+        {/* API Error Notification */}
+        <AnimatePresence>
+          {apiError && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              role="alert"
+              className="mb-6 p-4 border border-red-500/30 bg-red-500/10 text-red-400 text-xs tracking-wide uppercase font-semibold"
+            >
+              {apiError}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* First & Last Name Grid */}
+        <div className="grid grid-cols-2 gap-4">
           <Input
             {...register("firstName")}
             id="register-first-name"
-            label="First name"
-            placeholder="John"
+            label={AUTH_MESSAGES.REGISTER.FIRST_NAME_LABEL}
+            placeholder={AUTH_MESSAGES.REGISTER.FIRST_NAME_PLACEHOLDER}
             autoComplete="given-name"
             autoFocus
             error={errors.firstName?.message}
-            leftIcon={<HiUser className="h-4 w-4" />}
           />
           <Input
             {...register("lastName")}
             id="register-last-name"
-            label="Last name"
-            placeholder="Doe"
+            label={AUTH_MESSAGES.REGISTER.LAST_NAME_LABEL}
+            placeholder={AUTH_MESSAGES.REGISTER.LAST_NAME_PLACEHOLDER}
             autoComplete="family-name"
             error={errors.lastName?.message}
           />
         </div>
 
+        {/* Email Field */}
         <Input
           {...register("email")}
           id="register-email"
           type="email"
-          label="Email address"
-          placeholder="you@example.com"
+          label={AUTH_MESSAGES.REGISTER.EMAIL_LABEL}
+          placeholder={AUTH_MESSAGES.REGISTER.EMAIL_PLACEHOLDER}
           autoComplete="email"
           error={errors.email?.message}
-          leftIcon={<HiEnvelope className="h-4 w-4" />}
         />
 
-        <div className="flex flex-col gap-2">
+        {/* Password Field */}
+        <div className="flex flex-col gap-0 mt-2">
           <PasswordInput
             {...register("password")}
             id="register-password"
-            label="Password"
-            placeholder="Create a strong password"
+            label={AUTH_MESSAGES.REGISTER.PASSWORD_LABEL}
+            placeholder={AUTH_MESSAGES.REGISTER.PASSWORD_PLACEHOLDER}
             autoComplete="new-password"
             error={errors.password?.message}
-            leftIcon={<HiLockClosed className="h-4 w-4" />}
           />
-          <PasswordStrengthIndicator password={password} />
+          <div className="py-2">
+            <PasswordStrengthIndicator password={password} />
+          </div>
         </div>
 
+        {/* Confirm Password Field */}
         <PasswordInput
           {...register("confirmPassword")}
           id="register-confirm-password"
-          label="Confirm password"
-          placeholder="Repeat your password"
+          label={AUTH_MESSAGES.REGISTER.CONFIRM_PASSWORD_LABEL}
+          placeholder={AUTH_MESSAGES.REGISTER.CONFIRM_PASSWORD_PLACEHOLDER}
           autoComplete="new-password"
           error={errors.confirmPassword?.message}
-          leftIcon={<HiLockClosed className="h-4 w-4" />}
         />
 
-        <Button
-          type="submit"
-          variant="accent"
-          size="lg"
-          fullWidth
-          isLoading={isSubmitting}
-          id="register-submit"
-          className="shadow-lg shadow-violet-500/25 mt-2"
-        >
-          Create account
-        </Button>
-
-        <p className="text-center text-sm text-[var(--text-secondary)]">
-          Already have an account?{" "}
-          <Link
-            to={ROUTES.LOGIN}
-            className="font-semibold text-[var(--text-accent)] hover:opacity-80 transition-opacity"
+        {/* Submit Action Button */}
+        <div className="border-t border-[var(--border-default)] pt-10">
+          <Button
+            type="submit"
+            showArrowBox
+            arrowText="Go"
+            isLoading={isSubmitting}
+            id="register-submit"
           >
-            Sign in
-          </Link>
-        </p>
+            {isSubmitting ? "Processing..." : "Create account"}
+          </Button>
+        </div>
       </form>
+
+      {/* Footer Navigation */}
+      <AuthFooter
+        promptText={AUTH_MESSAGES.REGISTER.HAVE_ACCOUNT}
+        linkText={AUTH_MESSAGES.REGISTER.LOGIN_LINK}
+        to={ROUTES.LOGIN}
+      />
     </AuthLayout>
   );
 }

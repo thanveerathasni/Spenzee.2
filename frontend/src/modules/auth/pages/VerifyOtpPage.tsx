@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { HiEnvelope, HiArrowLeft, HiCheckCircle } from "react-icons/hi2";
+import React, { useCallback, useEffect, useState } from "react";
+import { HiCheckCircle } from "react-icons/hi2";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { AuthHeader } from "@/modules/auth/components";
 import { authService } from "@/modules/auth/services/authService";
-import { Button, OTPInput } from "@/shared/components";
-import { ROUTES } from "@/shared/constants";
-import { useToast } from "@/shared/hooks";
+import { BackButton, Button, OTPInput } from "@/shared/components/ui";
+import { AUTH_MESSAGES, ROUTES } from "@/shared/constants";
+import { useCountdown, useToast } from "@/shared/hooks";
 import { AuthLayout } from "@/shared/layouts";
 import { logger } from "@/shared/logger";
 
@@ -29,9 +30,11 @@ export function VerifyOtpPage(): React.JSX.Element {
   const [isResending, setIsResending] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
   const [verified, setVerified] = useState(false);
-  const [countdown, setCountdown] = useState(RESEND_COOLDOWN_SECONDS);
 
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { seconds, isActive, reset } = useCountdown({
+    initialSeconds: RESEND_COOLDOWN_SECONDS,
+    autoStart: true,
+  });
 
   // Redirect to register if no email in state
   useEffect(() => {
@@ -40,41 +43,9 @@ export function VerifyOtpPage(): React.JSX.Element {
     }
   }, [email, navigate]);
 
-  // Countdown timer
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          if (timerRef.current) clearInterval(timerRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
-
-  const resetCountdown = useCallback((): void => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    setCountdown(RESEND_COOLDOWN_SECONDS);
-
-    timerRef.current = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          if (timerRef.current) clearInterval(timerRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, []);
-
   const handleVerify = useCallback(async (): Promise<void> => {
     if (otp.length !== OTP_LENGTH) {
-      setOtpError("Please enter the complete 6-digit OTP.");
+      setOtpError("Please enter the complete 6-digit verification code.");
       return;
     }
 
@@ -91,7 +62,7 @@ export function VerifyOtpPage(): React.JSX.Element {
         void navigate(ROUTES.LOGIN, { replace: true });
       }, 2000);
     } catch (error) {
-      const msg = extractMessage(error, "Invalid or expired OTP. Please try again.");
+      const msg = extractMessage(error, "Invalid or expired verification code.");
       setOtpError(msg);
       toast.error(msg);
       logger.error("OTP verification failed.", { error });
@@ -101,7 +72,7 @@ export function VerifyOtpPage(): React.JSX.Element {
   }, [email, navigate, otp, toast]);
 
   const handleResend = useCallback(async (): Promise<void> => {
-    if (countdown > 0) return;
+    if (isActive) return;
 
     setIsResending(true);
     setOtpError(null);
@@ -109,15 +80,15 @@ export function VerifyOtpPage(): React.JSX.Element {
 
     try {
       await authService.resendOtp({ email });
-      toast.success("A new OTP has been sent to your email.");
-      resetCountdown();
+      toast.success(`Verification code resent to ${email}`);
+      reset(RESEND_COOLDOWN_SECONDS);
     } catch (error) {
-      const msg = extractMessage(error, "Failed to resend OTP. Please try again.");
+      const msg = extractMessage(error, "Failed to resend code. Please try again.");
       toast.error(msg);
     } finally {
       setIsResending(false);
     }
-  }, [countdown, email, resetCountdown, toast]);
+  }, [isActive, email, reset, toast]);
 
   // Auto-submit when all 6 digits entered
   useEffect(() => {
@@ -132,30 +103,18 @@ export function VerifyOtpPage(): React.JSX.Element {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-col items-center gap-6 py-8"
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center gap-6 py-10 max-w-sm text-center"
         >
-          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-green-500/10">
-            <HiCheckCircle className="h-10 w-10 text-green-500" />
+          <div className="w-16 h-16 border border-[var(--border-strong)] flex items-center justify-center mb-4">
+            <HiCheckCircle className="h-8 w-8 text-[var(--text-primary)]" />
           </div>
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
-              Email Verified!
-            </h2>
-            <p className="text-[var(--text-secondary)] text-sm">
-              Your account is verified. Redirecting you to login…
-            </p>
-          </div>
-          <div className="flex gap-1.5">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                animate={{ scale: [1, 1.3, 1], opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                className="w-2 h-2 rounded-full bg-green-500"
-              />
-            ))}
-          </div>
+
+          <AuthHeader
+            category="Email Dispatched"
+            title={`Code\nVerified.`}
+            subtitle="Your email has been confirmed. Redirecting to sign in…"
+          />
         </motion.div>
       </AuthLayout>
     );
@@ -163,84 +122,69 @@ export function VerifyOtpPage(): React.JSX.Element {
 
   return (
     <AuthLayout
-      title="Verify your email"
-      subtitle={`We sent a 6-digit code to ${email}. Enter it below to activate your account.`}
+      editorialTagline="Security Verification"
+      editorialHeadingLine1="Verify"
+      editorialHeadingLine2="Your"
+      editorialHeadingAccent="Identity."
+      editorialDescription={`Code dispatched to ${email || "your inbox"}. Enter the 6 digits below.`}
     >
-      <div className="flex flex-col gap-8">
-        {/* Email icon */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex justify-center"
-        >
-          <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-violet-500/10">
-            <HiEnvelope className="h-8 w-8 text-violet-500" />
-          </div>
-        </motion.div>
+      <AuthHeader
+        category={`Code sent to ${email}`}
+        title={`Verify\nEmail.`}
+      />
 
-        {/* OTP Input */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-        >
-          <OTPInput
-            value={otp}
-            onChange={setOtp}
-            error={otpError ?? undefined}
-            disabled={isVerifying}
-          />
-        </motion.div>
+      <div className="flex flex-col gap-6 w-full max-w-sm">
+        {/* OTP Input Component */}
+        <OTPInput
+          value={otp}
+          onChange={setOtp}
+          error={otpError ?? undefined}
+          disabled={isVerifying}
+        />
 
-        {/* Verify button */}
-        <Button
-          type="button"
-          variant="accent"
-          size="lg"
-          fullWidth
-          isLoading={isVerifying}
-          disabled={otp.length < OTP_LENGTH || isVerifying}
-          onClick={() => void handleVerify()}
-          id="otp-verify-btn"
-          className="shadow-lg shadow-violet-500/25"
-        >
-          Verify email
-        </Button>
-
-        {/* Resend section */}
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-sm text-[var(--text-secondary)]">Didn&apos;t receive the code?</p>
-
-          {countdown > 0 ? (
-            <p className="text-sm font-medium text-[var(--text-tertiary)]">
-              Resend in{" "}
-              <span className="text-[var(--text-accent)] tabular-nums font-bold">
-                {String(Math.floor(countdown / 60)).padStart(2, "0")}:
-                {String(countdown % 60).padStart(2, "0")}
-              </span>
-            </p>
+        {/* Timer / Resend Row */}
+        <div className="border-t border-[var(--border-default)] py-4 flex justify-between items-center">
+          <span className="text-[9px] text-[var(--text-tertiary)] tracking-widest uppercase font-bold">
+            One-time code
+          </span>
+          {seconds > 0 ? (
+            <span className="text-[10px] text-[var(--text-tertiary)] tracking-widest uppercase font-bold tabular-nums">
+              Resend in {seconds}s
+            </span>
           ) : (
             <button
               type="button"
               onClick={() => void handleResend()}
               disabled={isResending}
-              className="text-sm font-semibold text-[var(--text-accent)] hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors tracking-widest uppercase underline underline-offset-4 font-bold"
             >
-              {isResending ? "Sending…" : "Resend OTP"}
+              {isResending ? "Sending..." : "Resend code"}
             </button>
           )}
         </div>
 
-        {/* Back to register */}
-        <button
-          type="button"
-          onClick={() => void navigate(ROUTES.REGISTER)}
-          className="flex items-center justify-center gap-1.5 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
-        >
-          <HiArrowLeft className="h-4 w-4" />
-          Back to registration
-        </button>
+        {/* Submit Action Button */}
+        <div className="border-t border-[var(--border-default)] pt-10">
+          <Button
+            type="button"
+            showArrowBox
+            arrowText="Go"
+            isLoading={isVerifying}
+            disabled={otp.length < OTP_LENGTH || isVerifying}
+            onClick={() => void handleVerify()}
+            id="otp-verify-btn"
+          >
+            {isVerifying ? "Verifying..." : "Verify email"}
+          </Button>
+        </div>
+
+        {/* Back Link */}
+        <div className="border-t border-[var(--border-default)] pt-8 mt-4">
+          <BackButton
+            to={ROUTES.REGISTER}
+            label={AUTH_MESSAGES.VERIFY_OTP.BACK_TO_REGISTER.replace("← ", "")}
+          />
+        </div>
       </div>
     </AuthLayout>
   );

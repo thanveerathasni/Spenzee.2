@@ -1,14 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { HiLockClosed, HiCheckCircle } from "react-icons/hi2";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { HiCheckCircle } from "react-icons/hi2";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
+import { AuthHeader } from "@/modules/auth/components";
 import { authService } from "@/modules/auth/services/authService";
 import { resetPasswordSchema, type ResetPasswordFormValues } from "@/modules/auth/validation/authSchemas";
-import { Button, PasswordInput, PasswordStrengthIndicator } from "@/shared/components";
-import { ROUTES } from "@/shared/constants";
+import { Button, PasswordInput, PasswordStrengthIndicator } from "@/shared/components/ui";
+import { AUTH_MESSAGES, ROUTES } from "@/shared/constants";
 import { useToast } from "@/shared/hooks";
 import { AuthLayout } from "@/shared/layouts";
 import { logger } from "@/shared/logger";
@@ -67,27 +68,17 @@ export function ResetPasswordPage(): React.JSX.Element {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col items-center gap-6 py-6"
+          className="flex flex-col items-center gap-6 py-10 max-w-sm text-center"
         >
-          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-green-500/10">
-            <HiCheckCircle className="h-10 w-10 text-green-500" />
+          <div className="w-16 h-16 border border-[var(--border-strong)] flex items-center justify-center mb-4">
+            <HiCheckCircle className="h-8 w-8 text-[var(--text-primary)]" />
           </div>
-          <div className="text-center flex flex-col gap-2">
-            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Password updated!</h2>
-            <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-              Your password has been reset. Redirecting you to sign in…
-            </p>
-          </div>
-          <div className="flex gap-1.5">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                animate={{ scale: [1, 1.3, 1], opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                className="w-2 h-2 rounded-full bg-green-500"
-              />
-            ))}
-          </div>
+
+          <AuthHeader
+            category="Password Updated"
+            title={`Access\nReset.`}
+            subtitle={AUTH_MESSAGES.RESET_PASSWORD.SUCCESS_SUBTITLE}
+          />
         </motion.div>
       </AuthLayout>
     );
@@ -95,70 +86,97 @@ export function ResetPasswordPage(): React.JSX.Element {
 
   if (!token || !email) {
     return (
-      <AuthLayout title="Invalid link" subtitle="This reset link is invalid or has expired.">
-        <Button
-          variant="accent"
-          size="md"
-          fullWidth
-          onClick={() => void navigate(ROUTES.FORGOT_PASSWORD)}
-        >
-          Request a new link
-        </Button>
+      <AuthLayout
+        editorialTagline="Invalid Token"
+        editorialHeadingLine1="Link"
+        editorialHeadingLine2="Has"
+        editorialHeadingAccent="Expired."
+      >
+        <AuthHeader
+          category="Invalid Link"
+          title={`Expired\nLink.`}
+          subtitle="This reset link is invalid or has expired. Please request a new link."
+        />
+        <div className="pt-6 border-t border-[var(--border-default)]">
+          <Button
+            showArrowBox
+            arrowText="Request"
+            onClick={() => void navigate(ROUTES.FORGOT_PASSWORD)}
+          >
+            New link
+          </Button>
+        </div>
       </AuthLayout>
     );
   }
 
   return (
     <AuthLayout
-      title="Create new password"
-      subtitle="Choose a strong password for your account."
+      editorialTagline="Secure Recovery"
+      editorialHeadingLine1="Create"
+      editorialHeadingLine2="New"
+      editorialHeadingAccent="Access."
+      editorialDescription="Set a strong new password and continue your financial journey."
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
-        {apiError && (
-          <div
-            role="alert"
-            className="flex items-center gap-2.5 px-4 py-3 rounded-[var(--radius-lg)] bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 text-sm"
-          >
-            <span className="flex-shrink-0">⚠️</span>
-            {apiError}
-          </div>
-        )}
+      <AuthHeader
+        category={AUTH_MESSAGES.RESET_PASSWORD.SUBHEADING}
+        title={`Reset\nPass.`}
+      />
 
-        <div className="flex flex-col gap-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-0 max-w-sm w-full" noValidate>
+        {/* API Error Notification */}
+        <AnimatePresence>
+          {apiError && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              role="alert"
+              className="mb-6 p-4 border border-red-500/30 bg-red-500/10 text-red-400 text-xs tracking-wide uppercase font-semibold"
+            >
+              {apiError}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* New Password */}
+        <div className="flex flex-col gap-0">
           <PasswordInput
             {...register("password")}
             id="reset-password"
-            label="New password"
-            placeholder="Create a strong password"
+            label={AUTH_MESSAGES.RESET_PASSWORD.NEW_PASSWORD_LABEL}
+            placeholder={AUTH_MESSAGES.RESET_PASSWORD.NEW_PASSWORD_PLACEHOLDER}
             autoComplete="new-password"
             autoFocus
             error={errors.password?.message}
-            leftIcon={<HiLockClosed className="h-4 w-4" />}
           />
-          <PasswordStrengthIndicator password={password} />
+          <div className="py-2">
+            <PasswordStrengthIndicator password={password} />
+          </div>
         </div>
 
+        {/* Confirm Password */}
         <PasswordInput
           {...register("confirmPassword")}
           id="reset-confirm-password"
-          label="Confirm new password"
-          placeholder="Repeat your new password"
+          label={AUTH_MESSAGES.RESET_PASSWORD.CONFIRM_PASSWORD_LABEL}
+          placeholder={AUTH_MESSAGES.RESET_PASSWORD.CONFIRM_PASSWORD_PLACEHOLDER}
           autoComplete="new-password"
           error={errors.confirmPassword?.message}
-          leftIcon={<HiLockClosed className="h-4 w-4" />}
         />
 
-        <Button
-          type="submit"
-          variant="accent"
-          size="lg"
-          fullWidth
-          isLoading={isSubmitting}
-          id="reset-submit"
-          className="shadow-lg shadow-violet-500/25 mt-1"
-        >
-          Reset password
-        </Button>
+        {/* Submit */}
+        <div className="border-t border-[var(--border-default)] pt-10 mt-4">
+          <Button
+            type="submit"
+            showArrowBox
+            arrowText="Go"
+            isLoading={isSubmitting}
+            id="reset-submit"
+          >
+            {isSubmitting ? "Updating..." : "Reset password"}
+          </Button>
+        </div>
       </form>
     </AuthLayout>
   );

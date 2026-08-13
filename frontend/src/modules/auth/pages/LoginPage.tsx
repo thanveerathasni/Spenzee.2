@@ -1,12 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { HiEnvelope, HiLockClosed } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
 
+import { AuthFooter, AuthHeader } from "@/modules/auth/components";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/validation/authSchemas";
-import { Button, Input, PasswordInput } from "@/shared/components";
-import { ROUTES } from "@/shared/constants";
+import { Button, Input, PasswordInput } from "@/shared/components/ui";
+import { AUTH_MESSAGES, ROUTES } from "@/shared/constants";
+import { useToast } from "@/shared/hooks";
 import { AuthLayout } from "@/shared/layouts";
 import { useAppDispatch } from "@/store";
 import { loginThunk } from "@/store/authThunks";
@@ -14,6 +16,7 @@ import { loginThunk } from "@/store/authThunks";
 export function LoginPage(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [apiError, setApiError] = useState<string | null>(null);
 
   const {
@@ -31,86 +34,105 @@ export function LoginPage(): React.JSX.Element {
     const result = await dispatch(loginThunk(values));
 
     if (loginThunk.fulfilled.match(result)) {
+      toast.success("Successfully signed in.");
       void navigate(ROUTES.DASHBOARD, { replace: true });
     } else {
-      const errMsg = typeof result.payload === "string"
-        ? result.payload
-        : "Login failed. Please try again.";
+      const errMsg =
+        typeof result.payload === "string"
+          ? result.payload
+          : "Login failed. Please verify your credentials.";
       setApiError(errMsg);
+      toast.error(errMsg);
     }
   };
 
   return (
     <AuthLayout
-      title="Welcome back"
-      subtitle="Sign in to your Spenzee account to continue."
+      editorialTagline="Finance Reimagined"
+      editorialHeadingLine1="Own"
+      editorialHeadingLine2="Your"
+      editorialHeadingAccent="Money."
+      editorialDescription="Smart expense tracking built for people who take their finances seriously."
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
-        {/* API Error */}
-        {apiError && (
-          <div
-            role="alert"
-            className="flex items-center gap-2.5 px-4 py-3 rounded-[var(--radius-lg)] bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 text-sm"
-          >
-            <span className="flex-shrink-0">⚠️</span>
-            {apiError}
-          </div>
-        )}
+      {/* Editorial Header */}
+      <AuthHeader
+        category={AUTH_MESSAGES.LOGIN.SUBHEADING}
+        title={`Sign\nIn.`}
+      />
 
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-0 w-full" noValidate>
+        {/* API Error Notification */}
+        <AnimatePresence>
+          {apiError && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              role="alert"
+              className="mb-6 p-4 border border-red-500/30 bg-red-500/10 text-red-400 text-xs tracking-wide uppercase font-semibold"
+            >
+              {apiError}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Email Field */}
         <Input
           {...register("email")}
           id="login-email"
           type="email"
-          label="Email address"
-          placeholder="you@example.com"
+          label={AUTH_MESSAGES.LOGIN.EMAIL_LABEL}
+          placeholder={AUTH_MESSAGES.LOGIN.EMAIL_PLACEHOLDER}
           autoComplete="email"
           autoFocus
           error={errors.email?.message}
-          leftIcon={<HiEnvelope className="h-4 w-4" />}
         />
 
-        <div className="flex flex-col gap-1.5">
+        {/* Password Field */}
+        <div className="flex flex-col gap-0 mt-2">
           <PasswordInput
             {...register("password")}
             id="login-password"
-            label="Password"
-            placeholder="Enter your password"
+            label={AUTH_MESSAGES.LOGIN.PASSWORD_LABEL}
+            placeholder={AUTH_MESSAGES.LOGIN.PASSWORD_PLACEHOLDER}
             autoComplete="current-password"
             error={errors.password?.message}
-            leftIcon={<HiLockClosed className="h-4 w-4" />}
           />
-          <div className="flex justify-end">
+
+          {/* Forgot Password Link Row */}
+          <div className="border-t border-[var(--border-default)] py-4 flex justify-between items-center">
+            <span className="text-[9px] text-[var(--text-tertiary)] tracking-widest uppercase font-bold select-none">
+              Credentials
+            </span>
             <Link
               to={ROUTES.FORGOT_PASSWORD}
-              className="text-xs text-[var(--text-accent)] hover:opacity-80 transition-opacity font-medium"
+              className="text-[10px] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors tracking-widest uppercase font-bold"
             >
-              Forgot password?
+              {AUTH_MESSAGES.LOGIN.FORGOT_PASSWORD}
             </Link>
           </div>
         </div>
 
-        <Button
-          type="submit"
-          variant="accent"
-          size="lg"
-          fullWidth
-          isLoading={isSubmitting}
-          id="login-submit"
-          className="shadow-lg shadow-violet-500/25 mt-1"
-        >
-          Sign in
-        </Button>
-
-        <p className="text-center text-sm text-[var(--text-secondary)]">
-          Don&apos;t have an account?{" "}
-          <Link
-            to={ROUTES.REGISTER}
-            className="font-semibold text-[var(--text-accent)] hover:opacity-80 transition-opacity"
+        {/* Submit Action Button */}
+        <div className="border-t border-[var(--border-default)] pt-10">
+          <Button
+            type="submit"
+            showArrowBox
+            arrowText="Go"
+            isLoading={isSubmitting}
+            id="login-submit"
           >
-            Create one
-          </Link>
-        </p>
+            {isSubmitting ? "Signing in..." : "Sign in"}
+          </Button>
+        </div>
       </form>
+
+      {/* Footer Navigation */}
+      <AuthFooter
+        promptText={AUTH_MESSAGES.LOGIN.NO_ACCOUNT}
+        linkText={AUTH_MESSAGES.LOGIN.CREATE_ACCOUNT_LINK}
+        to={ROUTES.REGISTER}
+      />
     </AuthLayout>
   );
 }

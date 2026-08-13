@@ -1,28 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
+
+import { usePasswordVisibility } from "@/shared/hooks/usePasswordVisibility";
 
 import { Input, type InputProps } from "./Input";
 
-type PasswordInputProps = Omit<InputProps, "type" | "rightElement">;
+export type PasswordInputProps = Omit<InputProps, "type" | "rightElement">;
 
 export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   function PasswordInput(props, ref) {
-    const [visible, setVisible] = useState(false);
-
-    const toggle = (): void => setVisible((prev) => !prev);
+    const { isVisible, type, toggle } = usePasswordVisibility(false);
 
     return (
       <Input
         ref={ref}
-        type={visible ? "text" : "password"}
+        type={type}
         rightElement={
           <button
             type="button"
             onClick={toggle}
-            aria-label={visible ? "Hide password" : "Show password"}
-            className="p-1 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-accent)] rounded"
+            aria-label={isVisible ? "Hide password" : "Show password"}
+            className="p-1 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none focus-visible:outline-none"
           >
-            {visible ? <HiEyeSlash className="h-4 w-4" /> : <HiEye className="h-4 w-4" />}
+            {isVisible ? (
+              <HiEyeSlash className="h-4 w-4" />
+            ) : (
+              <HiEye className="h-4 w-4" />
+            )}
           </button>
         }
         {...props}

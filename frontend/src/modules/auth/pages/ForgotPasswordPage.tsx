@@ -2,13 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { HiEnvelope, HiCheckCircle, HiArrowLeft } from "react-icons/hi2";
+import { HiCheckCircle } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 
+import { AuthHeader } from "@/modules/auth/components";
 import { authService } from "@/modules/auth/services/authService";
 import { forgotPasswordSchema, type ForgotPasswordFormValues } from "@/modules/auth/validation/authSchemas";
-import { Button, Input } from "@/shared/components";
-import { ROUTES } from "@/shared/constants";
+import { Button, Input } from "@/shared/components/ui";
+
+import { AUTH_MESSAGES, ROUTES } from "@/shared/constants";
 import { useToast } from "@/shared/hooks";
 import { AuthLayout } from "@/shared/layouts";
 import { logger } from "@/shared/logger";
@@ -16,7 +18,6 @@ import { logger } from "@/shared/logger";
 export function ForgotPasswordPage(): React.JSX.Element {
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
-  const [sentTo, setSentTo] = useState("");
 
   const {
     register,
@@ -30,7 +31,6 @@ export function ForgotPasswordPage(): React.JSX.Element {
   const onSubmit = async (values: ForgotPasswordFormValues): Promise<void> => {
     try {
       await authService.requestPasswordReset({ email: values.email });
-      setSentTo(values.email);
       setSubmitted(true);
       logger.info("Password reset email requested.");
     } catch (error) {
@@ -42,51 +42,51 @@ export function ForgotPasswordPage(): React.JSX.Element {
 
   if (submitted) {
     return (
-      <AuthLayout>
+      <AuthLayout
+        editorialTagline="Security Recovery"
+        editorialHeadingLine1="Email"
+        editorialHeadingLine2="Dispatched."
+        editorialHeadingAccent="Check Inbox."
+        editorialDescription="Follow the instructions sent to your email to reset your access code."
+      >
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col items-center gap-6 py-6"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-sm w-full"
         >
-          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-green-500/10">
-            <HiCheckCircle className="h-10 w-10 text-green-500" />
-          </div>
+          <AuthHeader
+            category={AUTH_MESSAGES.FORGOT_PASSWORD.SUBHEADING}
+            title={`Check\nInbox.`}
+          />
 
-          <div className="text-center flex flex-col gap-2">
-            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Check your email</h2>
-            <p className="text-[var(--text-secondary)] text-sm max-w-xs leading-relaxed">
-              We sent a password reset link to{" "}
-              <span className="font-semibold text-[var(--text-primary)]">{sentTo}</span>. It will
-              expire in 15 minutes.
-            </p>
-          </div>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5, ease: "backOut" }}
+            className="w-16 h-16 border border-[var(--border-strong)] flex items-center justify-center mb-10"
+          >
+            <HiCheckCircle className="h-8 w-8 text-[var(--text-primary)]" />
+          </motion.div>
 
-          <div className="flex flex-col items-center gap-3 w-full">
-            <div className="flex items-center gap-3 w-full px-4 py-3 rounded-[var(--radius-lg)] bg-[var(--bg-surface-2)] border border-[var(--border-subtle)]">
-              <HiEnvelope className="h-5 w-5 text-[var(--text-tertiary)] flex-shrink-0" />
-              <p className="text-xs text-[var(--text-secondary)]">
-                Didn&apos;t receive it? Check your spam folder or request another email.
-              </p>
-            </div>
+          <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-10 max-w-[280px]">
+            {AUTH_MESSAGES.FORGOT_PASSWORD.SUCCESS_SUBTITLE}
+          </p>
 
-            <Button
-              type="button"
-              variant="secondary"
-              size="md"
-              fullWidth
-              onClick={() => setSubmitted(false)}
-            >
-              Try a different email
-            </Button>
-
-            <Link
-              to={ROUTES.LOGIN}
-              className="flex items-center gap-1.5 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
-            >
-              <HiArrowLeft className="h-4 w-4" />
-              Back to login
+          <div className="border-t border-[var(--border-default)] pt-10 flex flex-col gap-4">
+            <Link to={ROUTES.LOGIN}>
+              <Button showArrowBox arrowText="Login">
+                Sign in
+              </Button>
             </Link>
+
+            <button
+              type="button"
+              onClick={() => setSubmitted(false)}
+              className="text-[10px] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors tracking-widest uppercase text-left mt-2"
+            >
+              {AUTH_MESSAGES.FORGOT_PASSWORD.TRY_DIFFERENT_EMAIL}
+            </button>
           </div>
         </motion.div>
       </AuthLayout>
@@ -95,41 +95,55 @@ export function ForgotPasswordPage(): React.JSX.Element {
 
   return (
     <AuthLayout
-      title="Forgot password?"
-      subtitle="Enter your account email and we'll send you a reset link."
+      editorialTagline="Account Recovery"
+      editorialHeadingLine1="Reset"
+      editorialHeadingLine2="Your"
+      editorialHeadingAccent="Access."
+      editorialDescription="We'll send a secure link directly to your inbox. Back in seconds."
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
+      <AuthHeader
+        category={AUTH_MESSAGES.FORGOT_PASSWORD.SUBHEADING}
+        title={`Forgot\nPass.`}
+      />
+
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-0 max-w-sm w-full" noValidate>
+        {/* Email Address */}
         <Input
           {...register("email")}
           id="forgot-email"
           type="email"
-          label="Email address"
-          placeholder="you@example.com"
+          label={AUTH_MESSAGES.FORGOT_PASSWORD.EMAIL_LABEL}
+          placeholder={AUTH_MESSAGES.FORGOT_PASSWORD.EMAIL_PLACEHOLDER}
           autoComplete="email"
           autoFocus
           error={errors.email?.message}
-          leftIcon={<HiEnvelope className="h-4 w-4" />}
         />
 
-        <Button
-          type="submit"
-          variant="accent"
-          size="lg"
-          fullWidth
-          isLoading={isSubmitting}
-          id="forgot-submit"
-          className="shadow-lg shadow-violet-500/25"
-        >
-          Send reset link
-        </Button>
+        {/* Back Link */}
+        <div className="border-t border-[var(--border-default)] py-4 flex justify-between items-center">
+          <span className="text-[9px] text-[var(--text-tertiary)] tracking-widest uppercase font-bold select-none">
+            Registered email
+          </span>
+          <Link
+            to={ROUTES.LOGIN}
+            className="text-[10px] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors tracking-widest uppercase font-bold"
+          >
+            Back to login
+          </Link>
+        </div>
 
-        <Link
-          to={ROUTES.LOGIN}
-          className="flex items-center justify-center gap-1.5 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
-        >
-          <HiArrowLeft className="h-4 w-4" />
-          Back to login
-        </Link>
+        {/* Submit */}
+        <div className="border-t border-[var(--border-default)] pt-10">
+          <Button
+            type="submit"
+            showArrowBox
+            arrowText="Send"
+            isLoading={isSubmitting}
+            id="forgot-submit"
+          >
+            {isSubmitting ? "Sending..." : "Send reset link"}
+          </Button>
+        </div>
       </form>
     </AuthLayout>
   );

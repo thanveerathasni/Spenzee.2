@@ -44,4 +44,42 @@ export const LOG_MESSAGES = {
   OTP_VERIFIED: "OTP verified successfully.",
 
   USER_LOGGED_OUT: "User logged out.",
+
+  OTP_GENERATED: "OTP generated successfully.",
+
+  OTP_EXPIRED: "OTP has expired.",
+
+  OTP_NOT_FOUND: "OTP not found.",
+
+  OTP_ALREADY_USED: "OTP has already been used.",
+
+  OTP_INVALID: "Invalid OTP.",
+
+  OTP_RESENT: "OTP resent successfully.",
+
+  OTP_RESEND_FAILED: "Failed to resend OTP.",
+
+  OTP_ALREADY_EXISTS: "OTP already exists for this email.",
+
+  OTP_NOT_SENT: "Failed to send OTP email.",
+
+  OTP_EMAIL_TEMPLATE_ERROR: "Error in OTP email template.",
+
+  OTP_EMAIL_SEND_ERROR: "Error sending OTP email.",
+
+  OTP_EMAIL_SENT: "OTP email sent successfully.",
+
+  OTP_EMAIL_NOT_FOUND: "OTP email not found.",
+
+  OTP_EMAIL_INVALID: "Invalid OTP email.",
+
+  OTP_EMAIL_EXPIRED: "OTP email has expired.",
+
+  OTP_EMAIL_ALREADY_USED: "OTP email has already been used.",
+
+  OTP_EMAIL_RESENT: "OTP email resent successfully.",
+
+  OTP_EMAIL_RESEND_FAILED: "Failed to resend OTP email.",
+
+  OTP_EMAIL_ALREADY_EXISTS: "OTP email already exists for this email.",
 } as const;

@@ -1,4 +1,5 @@
-import React, { useId } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useId, useState } from "react";
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -9,70 +10,94 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, error, helperText, leftIcon, rightElement, className = "", id, ...props },
+  { label, error, helperText, leftIcon, rightElement, className = "", id, onFocus, onBlur, ...props },
   ref,
 ) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const hasError = Boolean(error);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
 
   return (
-    <div className="flex flex-col gap-1.5 w-full">
-      {label && (
-        <label
-          htmlFor={inputId}
-          className="text-sm font-medium text-[var(--text-primary)] select-none"
-        >
-          {label}
-        </label>
-      )}
-
-      <div className="relative flex items-center">
-        {leftIcon && (
-          <span className="absolute left-3 flex items-center text-[var(--input-placeholder)] pointer-events-none">
-            {leftIcon}
-          </span>
+    <div
+      className={`border-t transition-colors duration-300 w-full ${
+        hasError
+          ? "border-red-500"
+          : isFocused
+            ? "border-[var(--input-border-focus)]"
+            : "border-[var(--input-border)]"
+      }`}
+    >
+      <div className="pt-4 pb-3">
+        {label && (
+          <label
+            htmlFor={inputId}
+            className="block text-[9px] font-black uppercase tracking-[0.35em] text-[var(--text-tertiary)] mb-2 select-none"
+          >
+            {label}
+          </label>
         )}
 
-        <input
-          ref={ref}
-          id={inputId}
-          aria-invalid={hasError}
-          aria-describedby={hasError ? `${inputId}-error` : helperText ? `${inputId}-hint` : undefined}
-          className={[
-            "w-full h-10 rounded-[var(--radius-lg)] px-3 text-sm",
-            "bg-[var(--input-bg)] text-[var(--text-primary)]",
-            "border transition-colors duration-[var(--transition-fast)]",
-            "placeholder:text-[var(--input-placeholder)]",
-            "focus:outline-none focus:ring-2 focus:ring-[var(--input-border-focus)] focus:ring-offset-0",
-            "disabled:opacity-50 disabled:cursor-not-allowed",
-            hasError
-              ? "border-red-500 focus:ring-red-500/30"
-              : "border-[var(--input-border)] focus:border-[var(--input-border-focus)]",
-            leftIcon ? "pl-10" : "",
-            rightElement ? "pr-10" : "",
-            className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          {...props}
-        />
+        <div className="relative flex items-center gap-3">
+          {leftIcon && (
+            <span className="flex-shrink-0 text-[var(--text-tertiary)] pointer-events-none">
+              {leftIcon}
+            </span>
+          )}
 
-        {rightElement && (
-          <span className="absolute right-3 flex items-center">{rightElement}</span>
-        )}
+          <input
+            ref={ref}
+            id={inputId}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            aria-invalid={hasError}
+            aria-describedby={hasError ? `${inputId}-error` : helperText ? `${inputId}-hint` : undefined}
+            className={[
+              "w-full bg-transparent text-[var(--text-primary)] text-base font-light",
+              "placeholder:text-[var(--input-placeholder)] focus:outline-none",
+              "disabled:opacity-40 disabled:cursor-not-allowed",
+              className,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            {...props}
+          />
+
+          {rightElement && (
+            <span className="flex-shrink-0 flex items-center">{rightElement}</span>
+          )}
+        </div>
       </div>
 
-      {hasError && (
-        <p id={`${inputId}-error`} role="alert" className="text-xs text-red-500 font-medium">
-          {error}
-        </p>
-      )}
-      {!hasError && helperText && (
-        <p id={`${inputId}-hint`} className="text-xs text-[var(--text-tertiary)]">
-          {helperText}
-        </p>
-      )}
+      <AnimatePresence>
+        {hasError && (
+          <motion.p
+            id={`${inputId}-error`}
+            role="alert"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="text-[11px] text-red-400 pb-2 font-medium"
+          >
+            {error}
+          </motion.p>
+        )}
+        {!hasError && helperText && (
+          <p id={`${inputId}-hint`} className="text-[10px] text-[var(--text-tertiary)] pb-2">
+            {helperText}
+          </p>
+        )}
+      </AnimatePresence>
     </div>
   );
 });

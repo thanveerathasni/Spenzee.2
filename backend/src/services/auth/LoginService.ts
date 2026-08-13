@@ -91,12 +91,35 @@ export class LoginService implements ILoginService {
     const accessToken = this.jwtService.generateAccessToken(payload);
     const refreshToken = this.jwtService.generateRefreshToken(payload);
 
-    await this.refreshTokenRepository.store({
-      userId: userObjectId,
-      userType: "User",
-      token: refreshToken.token,
-      expiresAt: refreshToken.expiresAt,
-    });
+try {
+  const savedToken = await this.refreshTokenRepository.store({
+    userId: userObjectId,
+    userType: "User",
+    token: refreshToken.token,
+    expiresAt: refreshToken.expiresAt,
+  });
+const count = await this.refreshTokenRepository.findByToken(
+  refreshToken.token,
+);
+
+this.logger.info("Lookup immediately after save.", {
+  found: !!count,
+});
+  this.logger.info("Refresh token saved.", {
+    id: (savedToken as { _id?: unknown })._id,
+  });
+} catch (error) {
+  this.logger.error("Failed to save refresh token.", { error });
+  throw error;
+}
+
+
+    // await this.refreshTokenRepository.store({
+    //   userId: userObjectId,
+    //   userType: "User",
+    //   token: refreshToken.token,
+    //   expiresAt: refreshToken.expiresAt,
+    // });
     await this.userRepository.updateById(userId, {
       lastLoginAt: new Date(),
     });

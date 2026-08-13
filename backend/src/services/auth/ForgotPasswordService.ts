@@ -50,7 +50,12 @@ export class ForgotPasswordService implements IForgotPasswordService {
       const resetToken = randomBytes(32).toString("hex");
       const hashedResetToken = await this.passwordService.hash(resetToken);
       const expiresAt = new Date(Date.now() + AUTH_TOKEN_EXPIRY.RESET_PASSWORD_MINUTES * 60 * 1000);
-
+if (process.env.NODE_ENV === "development") {
+  this.logger.info("Development password reset token generated.", {
+    email: user.email,
+    resetToken,
+  });
+}
       await this.resetPasswordTokenRepository.upsertByEmail(
         user.email,
         hashedResetToken,

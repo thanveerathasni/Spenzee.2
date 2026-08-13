@@ -14,20 +14,23 @@ import { ROUTES } from "@/shared/constants";
 import { AppLayout } from "@/shared/layouts/AppLayout";
 import {
   DashboardPlaceholder,
+  LogoutSuccessPage,
   NotFoundPage,
+  SessionExpiredPage,
   UnauthorizedPage,
 } from "@/shared/pages";
 import { PrivateRoute, PublicRoute, RoleRoute } from "@/shared/routes";
 import { UserRole } from "@/shared/types";
 
-// Pages — auth
-
-// Pages — shared
-
 function PageLoader(): React.JSX.Element {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)]">
-      <Spinner size="lg" />
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)] transition-colors duration-700">
+      <div className="flex flex-col items-center gap-4">
+        <Spinner size="lg" />
+        <span className="text-[10px] font-black uppercase tracking-[0.35em] text-[var(--text-tertiary)]">
+          Loading Workspace
+        </span>
+      </div>
     </div>
   );
 }
@@ -47,6 +50,10 @@ export function AppRoutes(): React.JSX.Element {
           <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
           <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
         </Route>
+
+        {/* Status / Session Pages */}
+        <Route path={ROUTES.LOGOUT_SUCCESS} element={<LogoutSuccessPage />} />
+        <Route path={ROUTES.SESSION_EXPIRED} element={<SessionExpiredPage />} />
 
         {/* Private routes (redirect to login if not authenticated) */}
         <Route element={<PrivateRoute />}>

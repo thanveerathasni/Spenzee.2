@@ -30,7 +30,11 @@ export class RefreshTokenService implements IRefreshTokenService {
   async execute(data: RefreshTokenRequestDto): Promise<RefreshTokenResponseDto> {
     const payload = this.jwtService.verifyRefreshToken(data.refreshToken);
     const storedToken = await this.refreshTokenRepository.findByToken(data.refreshToken);
-
+this.logger.info("Refresh token lookup result.", {
+  found: !!storedToken,
+  userId: storedToken?.userId?.toString(),
+  payloadUserId: payload.userId,
+});
     if (!storedToken || storedToken.userId.toString() !== payload.userId) {
       this.logger.warn(LOG_MESSAGES.REFRESH_TOKEN_FAILED, {
         userId: payload.userId,

@@ -8,6 +8,14 @@ export const connectDatabase = async (): Promise<void> => {
   try {
     await mongoose.connect(env.MONGO_URI);
 
+
+    console.log("Connected database:", mongoose.connection.name);
+console.log("Connected host:", mongoose.connection.host);
+console.log("Connected port:", mongoose.connection.port);
+console.log("Mongo URI:", env.MONGO_URI);
+
+// logger.info("Connected database:", mongoose.connection.name);
+// logger.info("Mongo URI:", env.MONGO_URI);
     logger.info(" MongoDB connected successfully");
   } catch (error) {
     logger.error(" Failed to connect to MongoDB");

@@ -73,7 +73,7 @@ export class RegisterUserService implements IRegisterUserService {
         expiresAt,
       });
     }
-
+    this.logger.info(otp, { email: data.email, message: LOG_MESSAGES.OTP_GENERATED });
     if (existingOtp) {
       await this.otpRepository.updateByEmail(data.email, {
         code: hashedOtp,

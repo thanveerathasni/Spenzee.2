@@ -24,7 +24,6 @@ const RefreshTokenSchema = new Schema<IRefreshToken>(
     token: {
       type: String,
       required: true,
-      unique: true,
     },
     expiresAt: {
       type: Date,
@@ -37,7 +36,7 @@ const RefreshTokenSchema = new Schema<IRefreshToken>(
   },
 );
 
-// RefreshTokenSchema.index({ token: 1 }, { unique: true });
+RefreshTokenSchema.index({ token: 1 }, { unique: true });
 RefreshTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export const RefreshTokenModel = model<IRefreshToken>("RefreshToken", RefreshTokenSchema);
+export const RefreshTokenModel = model<IRefreshToken>("RefreshToken", RefreshTokenSchema,"refresh_tokens",);
