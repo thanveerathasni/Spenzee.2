@@ -31,7 +31,7 @@ import type { ILogger } from "../../shared/logger/ILogger";
 export class JwtService implements IJwtService {
     constructor(
         @inject(TYPES.Logger)
-        private readonly logger: ILogger,
+        private readonly _logger: ILogger,
     ) {}
 
     generateAccessToken(payload: JwtPayload): string {
@@ -99,7 +99,7 @@ export class JwtService implements IJwtService {
             ) as JsonWebTokenPayload;
         } catch (error) {
             if (error instanceof jwt.TokenExpiredError) {
-                this.logger.warn(
+                this._logger.warn(
                     LOG_MESSAGES.TOKEN_EXPIRED,
                     {
                         expiredAt: error.expiredAt,
@@ -116,7 +116,7 @@ export class JwtService implements IJwtService {
                 error instanceof jwt.JsonWebTokenError ||
                 error instanceof jwt.NotBeforeError
             ) {
-                this.logger.warn(
+                this._logger.warn(
                     LOG_MESSAGES.INVALID_TOKEN,
                     {
                         reason: error.message,
@@ -129,7 +129,7 @@ export class JwtService implements IJwtService {
                 );
             }
 
-            this.logger.error(
+            this._logger.error(
                 LOG_MESSAGES.INVALID_TOKEN,
                 { error },
             );
@@ -144,7 +144,7 @@ export class JwtService implements IJwtService {
             this.toDecodedPayload(decoded);
 
         if (!payload) {
-            this.logger.warn(
+            this._logger.warn(
                 LOG_MESSAGES.INVALID_TOKEN,
                 {
                     reason:
@@ -168,7 +168,7 @@ export class JwtService implements IJwtService {
             this.decodeToken(token);
 
         if (!payload?.exp) {
-            this.logger.error(
+            this._logger.error(
                 LOG_MESSAGES.INVALID_TOKEN,
                 {
                     reason:

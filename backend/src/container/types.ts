@@ -1,10 +1,8 @@
 export const TYPES = {
   Logger: Symbol.for("Logger"),
 
-  // auth  types
-
+  // Auth
   AuthRepository: Symbol.for("AuthRepository"),
-
   AuthService: Symbol.for("AuthService"),
 
   // Repositories
@@ -13,6 +11,12 @@ export const TYPES = {
   OtpRepository: Symbol.for("OtpRepository"),
   RefreshTokenRepository: Symbol.for("RefreshTokenRepository"),
   ResetPasswordTokenRepository: Symbol.for("ResetPasswordTokenRepository"),
+
+  // Admin
+  AdminRepository: Symbol.for("AdminRepository"),
+
+  // Provider
+  ProviderRepository: Symbol.for("ProviderRepository"),
 
   // Services
   PasswordService: Symbol.for("PasswordService"),
@@ -28,8 +32,20 @@ export const TYPES = {
   ForgotPasswordService: Symbol.for("ForgotPasswordService"),
   ResetPasswordService: Symbol.for("ResetPasswordService"),
   ChangePasswordService: Symbol.for("ChangePasswordService"),
+
+  // Admin Services
+  AdminSeedService: Symbol.for("AdminSeedService"),
+  AdminLoginService: Symbol.for("AdminLoginService"),
+
+  // Provider Services
+  ApplyProviderService: Symbol.for("ApplyProviderService"),
+
+  // Middleware
   AuthMiddleware: Symbol.for("AuthMiddleware"),
+
   // Controllers
   UserController: Symbol.for("UserController"),
   AuthController: Symbol.for("AuthController"),
+  ProviderController: Symbol.for("ProviderController"),
+  AdminController: Symbol.for("AdminController"),
 } as const;

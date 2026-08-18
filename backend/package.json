@@ -15,7 +15,8 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "seed:admin": "tsx src/seeds/admin.seed.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

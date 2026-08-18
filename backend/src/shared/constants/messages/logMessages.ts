@@ -8,7 +8,7 @@ export const LOG_MESSAGES = {
   USER_REGISTERED: "User registered.",
 
   USER_LOGGED_IN: "User logged in.",
-
+LOGGED_OUT: "User logged out.",
   LOGIN_FAILED: "Login failed.",
 
   LOGIN_INVALID_PASSWORD: "Login failed: invalid password.",
@@ -42,8 +42,6 @@ export const LOG_MESSAGES = {
   OTP_VERIFICATION_FAILED: "OTP verification failed.",
 
   OTP_VERIFIED: "OTP verified successfully.",
-
-  USER_LOGGED_OUT: "User logged out.",
 
   OTP_GENERATED: "OTP generated successfully.",
 

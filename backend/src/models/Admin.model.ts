@@ -1,55 +1,65 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, type Types } from "mongoose";
 
 export interface IAdmin {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    isActive: boolean;
-    lastLoginAt?: Date;
-    createdAt: Date;
-    updatedAt: Date;
+  _id?: Types.ObjectId;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+  lastLoginAt?: Date;
+  deletedAt?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const AdminSchema = new Schema<IAdmin>(
-    {
-        firstName: {
-            type: String,
-            // required: true,
-            trim: true,
-        },
-        lastName: {
-            type: String,
-            // required: true,
-            trim: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-        },
-        password: {
-            type: String,
-            required: true,
-            select: false,
-        },
-        isActive: {
-            type: Boolean,
-            default: true,
-        },
-        lastLoginAt: {
-            type: Date,
-        },
+  {
+    firstName: {
+      type: String,
+      trim: true,
     },
-    {
-        timestamps: true,
-        versionKey: false,
-    }
+
+    lastName: {
+      type: String,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
+    lastLoginAt: {
+      type: Date,
+    },
+
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
-// AdminSchema.index({ email: 1 }, { unique: true });
 AdminSchema.index({ isActive: 1 });
+AdminSchema.index({ deletedAt: 1 });
 
 export const AdminModel = model<IAdmin>("Admin", AdminSchema);
