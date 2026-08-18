@@ -22,4 +22,7 @@ export const SUCCESS_MESSAGES = {
   PROVIDER_APPROVED: "Provider approved successfully.",
 
   PROVIDER_REJECTED: "Provider rejected successfully.",
+
+
+  PROVIDER_PASSWORD_SETUP_SUCCESS: "Provider password setup completed successfully.",
 } as const;

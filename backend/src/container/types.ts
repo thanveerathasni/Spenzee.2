@@ -17,6 +17,12 @@ export const TYPES = {
 
   // Provider
   ProviderRepository: Symbol.for("ProviderRepository"),
+ProviderPasswordSetupTokenRepository: Symbol.for(
+  "ProviderPasswordSetupTokenRepository",
+),
+ProviderResetPasswordTokenRepository: Symbol.for(
+  "ProviderResetPasswordTokenRepository",
+),
 
   // Services
   PasswordService: Symbol.for("PasswordService"),
@@ -40,6 +46,10 @@ export const TYPES = {
 
   // Provider Services
   ApplyProviderService: Symbol.for("ApplyProviderService"),
+ProviderPasswordSetupService: Symbol.for("ProviderPasswordSetupService"),
+ProviderLoginService: Symbol.for("ProviderLoginService"),
+  ProviderForgotPasswordService: Symbol.for("ProviderForgotPasswordService"),
+  ProviderResetPasswordService: Symbol.for("ProviderResetPasswordService"),
 
   // Middleware
   AuthMiddleware: Symbol.for("AuthMiddleware"),
@@ -47,6 +57,14 @@ export const TYPES = {
   // Controllers
   UserController: Symbol.for("UserController"),
   AuthController: Symbol.for("AuthController"),
+  ProviderLoginController: Symbol.for("ProviderLoginController"),
+
+
   ProviderController: Symbol.for("ProviderController"),
+  ProviderPasswordSetupController: Symbol.for("ProviderPasswordSetupController"),
+  ProviderForgotPasswordController: Symbol.for("ProviderForgotPasswordController"),
+  ProviderResetPasswordController: Symbol.for("ProviderResetPasswordController"),
+
   AdminController: Symbol.for("AdminController"),
+
 } as const;

@@ -108,4 +108,65 @@ export class EmailService implements IEmailService {
       throw error;
     }
   }
+
+
+
+
+    async sendProviderPasswordSetupEmail(
+    email: string,
+    token: string,
+  ): Promise<void> {
+    try {
+      await this._mailer.sendMail({
+        from: env.SMTP_FROM,
+        to: email,
+        subject: "Set up your Spenzee provider password",
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+            <h2>Provider Account Approved</h2>
+
+            <p>Hello,</p>
+
+            <p>
+              Your Spenzee provider application has been approved.
+              Use the token below to set your password.
+            </p>
+
+            <div
+              style="
+                font-size:24px;
+                font-weight:bold;
+                text-align:center;
+                padding:20px;
+                margin:20px 0;
+                background:#f5f5f5;
+                border-radius:8px;
+                word-break:break-all;
+              "
+            >
+              ${token}
+            </div>
+
+            <p>This setup token is valid for 15 minutes.</p>
+
+            <p>If you did not expect this email, please ignore it.</p>
+
+            <hr />
+
+            <p><strong>Spenzee Team</strong></p>
+          </div>
+        `,
+      });
+
+      this._logger.info("Provider password setup email sent successfully.", {
+        email,
+      });
+    } catch (error) {
+      this._logger.error(
+        "Failed to send provider password setup email.",
+        error,
+      );
+      throw error;
+    }
+  }
 }

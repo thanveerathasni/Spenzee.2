@@ -4,6 +4,7 @@ import { CommerceStatus } from "../shared/enums/CommerceStatus";
 import { ProviderStatus } from "../shared/enums/ProviderStatus";
 
 export interface IProvider {
+  _id?: Types.ObjectId;
   brandName: string;
   email: string;
   phone: string;
