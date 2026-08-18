@@ -1,16 +1,13 @@
 import { injectable } from "inversify";
 
+import { AdminModel } from "../../models/Admin.model";
 import { BaseRepository } from "../base/BaseRepository";
 
 import type { IAdminRepository } from "../../interfaces/repositories/admin/IAdminRepository";
 import type { IAdmin } from "../../models/Admin.model";
-import { AdminModel } from "../../models/Admin.model";
 
 @injectable()
-export class AdminRepository
-  extends BaseRepository<IAdmin>
-  implements IAdminRepository
-{
+export class AdminRepository extends BaseRepository<IAdmin> implements IAdminRepository {
   constructor() {
     super(AdminModel);
   }

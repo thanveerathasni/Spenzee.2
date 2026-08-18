@@ -1,10 +1,9 @@
 import { injectable } from "inversify";
 
-import { BaseRepository } from "../base/BaseRepository";
 
 import { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
-
 import { IOtp, OtpModel } from "../../models/Otp.models";
+import { BaseRepository } from "../base/BaseRepository";
 
 @injectable()
 export class OtpRepository extends BaseRepository<IOtp> implements IOtpRepository {

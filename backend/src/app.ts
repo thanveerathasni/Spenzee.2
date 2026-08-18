@@ -1,13 +1,12 @@
-import express, { type Application } from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
-
-import userRoutes from "./routes/user/UserRoutes";
-import providerRoutes from "./routes/provider/ProviderRoutes";
-import authRoutes from "./routes/auth/AuthRoutes";
-import adminRoutes from "./routes/admin/AdminRoutes";
+import cors from "cors";
+import express, { type Application } from "express";
 
 import { errorHandler } from "./middlewares/errorHandler";
+import adminRoutes from "./routes/admin/AdminRoutes";
+import authRoutes from "./routes/auth/AuthRoutes";
+import providerRoutes from "./routes/provider/ProviderRoutes";
+import userRoutes from "./routes/user/UserRoutes";
 
 const app: Application = express();
 

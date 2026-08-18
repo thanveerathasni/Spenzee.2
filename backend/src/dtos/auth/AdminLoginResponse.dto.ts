@@ -9,6 +9,3 @@ export interface AdminLoginResponseDto {
     isActive: boolean;
   };
 }
-
-
-

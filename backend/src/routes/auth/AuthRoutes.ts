@@ -2,20 +2,20 @@ import { Router } from "express";
 
 import { container } from "../../container";
 import { TYPES } from "../../container/types";
+import { validate } from "../../middlewares/validate";
+import { changePasswordSchema } from "../../validators/auth/ChangePasswordValidator";
+import { forgotPasswordSchema } from "../../validators/auth/ForgotPasswordValidator";
+import { loginSchema } from "../../validators/auth/LoginValidator";
+import { logoutSchema } from "../../validators/auth/LogoutValidator";
+import { refreshTokenSchema } from "../../validators/auth/RefreshTokenValidator";
+import { registerUserSchema } from "../../validators/auth/registerUser.validator";
+import { resetPasswordSchema } from "../../validators/auth/ResetPasswordValidator";
+import { verifyOtpSchema } from "../../validators/auth/verifyOtp.validator";
 
 import type { IAuthController } from "../../interfaces/controllers/auth/IAuthController";
 import type { IAuthMiddleware } from "../../interfaces/middlewares/IAuthMiddleware";
 
-import { validate } from "../../middlewares/validate";
 
-import { registerUserSchema } from "../../validators/auth/registerUser.validator";
-import { verifyOtpSchema } from "../../validators/auth/verifyOtp.validator";
-import { loginSchema } from "../../validators/auth/LoginValidator";
-import { refreshTokenSchema } from "../../validators/auth/RefreshTokenValidator";
-import { logoutSchema } from "../../validators/auth/LogoutValidator";
-import { forgotPasswordSchema } from "../../validators/auth/ForgotPasswordValidator";
-import { resetPasswordSchema } from "../../validators/auth/ResetPasswordValidator";
-import { changePasswordSchema } from "../../validators/auth/ChangePasswordValidator";
 const router = Router();
 
 const authController = container.get<IAuthController>(TYPES.AuthController);

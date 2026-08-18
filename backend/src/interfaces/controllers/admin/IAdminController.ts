@@ -1,13 +1,8 @@
+import type { RequestHandler } from "express";
 
-
-import { Request, Response } from 'express';
-import {RequestHandler} from 'express';
 export interface IAdminController {
-
-    login:RequestHandler
+  login: RequestHandler;
+  getPendingProviders: RequestHandler;
+  approveProvider: RequestHandler;
+  rejectProvider: RequestHandler;
 }
-
-
-
-
-

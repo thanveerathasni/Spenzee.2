@@ -1,10 +1,10 @@
 import "reflect-metadata";
-import { TYPES } from "./container/types.js";
-import { container } from "./container/index.js";
 import app from "./app.js";
 import { connectDatabase } from "./config/database.js";
 import { env } from "./config/env.js";
-import { ILogger } from "./shared/logger/ILogger.js";
+import { container } from "./container/index.js";
+import { TYPES } from "./container/types.js";
+import { type ILogger } from "./shared/logger/ILogger.js";
 const logger = container.get<ILogger>(TYPES.Logger);
 const startServer = async (): Promise<void> => {
   try {

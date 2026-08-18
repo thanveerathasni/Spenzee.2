@@ -1,6 +1,12 @@
 import { inject, injectable } from "inversify";
 
 import { TYPES } from "../../container/types";
+import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
+import { LOG_MESSAGES } from "../../shared/constants/messages/logMessages";
+import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
+import { UserRole } from "../../shared/enums/UserRole";
+import { AppError } from "../../shared/errors/AppError";
+
 import type { LoginRequestDto, LoginResponseDto } from "../../dtos/auth/LoginRequest.dto";
 import type { IRefreshTokenRepository } from "../../interfaces/repositories/auth/IRefreshTokenRepository";
 import type { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
@@ -8,43 +14,39 @@ import type { IJwtService } from "../../interfaces/services/auth/IJwtService";
 import type { ILoginService } from "../../interfaces/services/auth/ILoginService";
 import type { IPasswordService } from "../../interfaces/services/auth/IPasswordService";
 import type { ILogger } from "../../shared/logger/ILogger";
-import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
-import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
-import { LOG_MESSAGES } from "../../shared/constants/messages/logMessages";
-import { AppError } from "../../shared/errors/AppError";
-import { UserRole } from "../../shared/enums/UserRole";
+
 
 @injectable()
 export class LoginService implements ILoginService {
   constructor(
     @inject(TYPES.UserRepository)
-    private readonly userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository,
 
     @inject(TYPES.PasswordService)
-    private readonly passwordService: IPasswordService,
+    private readonly _passwordService: IPasswordService,
 
     @inject(TYPES.JwtService)
-    private readonly jwtService: IJwtService,
+    private readonly _jwtService: IJwtService,
 
     @inject(TYPES.RefreshTokenRepository)
-    private readonly refreshTokenRepository: IRefreshTokenRepository,
+    private readonly _refreshTokenRepository: IRefreshTokenRepository,
 
     @inject(TYPES.Logger)
-    private readonly logger: ILogger,
+    private readonly _logger: ILogger,
   ) {}
 
   async execute(data: LoginRequestDto): Promise<LoginResponseDto> {
-    const user = await this.userRepository.findLoginUserByEmail(data.email);
+    const user = await this._userRepository.findLoginUserByEmail(data.email);
 
     if (!user) {
-      this.logger.warn(LOG_MESSAGES.LOGIN_USER_NOT_FOUND, {
+      this._logger.warn(LOG_MESSAGES.LOGIN_USER_NOT_FOUND, {
         email: data.email,
       });
       throw new AppError(ERROR_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
     }
 
     if (user.deletedAt) {
-      this.logger.warn(LOG_MESSAGES.LOGIN_FAILED, {
+      this._logger.warn(LOG_MESSAGES.LOGIN_FAILED, {
         email: data.email,
         reason: "soft-deleted account",
       });
@@ -52,7 +54,7 @@ export class LoginService implements ILoginService {
     }
 
     if (!user.isActive) {
-      this.logger.warn(LOG_MESSAGES.LOGIN_FAILED, {
+      this._logger.warn(LOG_MESSAGES.LOGIN_FAILED, {
         email: data.email,
         reason: "inactive account",
       });
@@ -60,16 +62,16 @@ export class LoginService implements ILoginService {
     }
 
     if (!user.password) {
-      this.logger.warn(LOG_MESSAGES.LOGIN_INVALID_PASSWORD, {
+      this._logger.warn(LOG_MESSAGES.LOGIN_INVALID_PASSWORD, {
         email: data.email,
       });
       throw new AppError(ERROR_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const passwordMatches = await this.passwordService.compare(data.password, user.password);
+    const passwordMatches = await this._passwordService.compare(data.password, user.password);
 
     if (!passwordMatches) {
-      this.logger.warn(LOG_MESSAGES.LOGIN_INVALID_PASSWORD, {
+      this._logger.warn(LOG_MESSAGES.LOGIN_INVALID_PASSWORD, {
         email: data.email,
       });
       throw new AppError(ERROR_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
@@ -78,7 +80,7 @@ export class LoginService implements ILoginService {
     const userObjectId = user._id;
 
     if (!userObjectId) {
-      this.logger.error(LOG_MESSAGES.LOGIN_FAILED, {
+      this._logger.error(LOG_MESSAGES.LOGIN_FAILED, {
         email: data.email,
         reason: "user identifier missing",
       });
@@ -88,43 +90,40 @@ export class LoginService implements ILoginService {
     const userId = userObjectId.toString();
 
     const payload = { userId, email: user.email, role: UserRole.USER };
-    const accessToken = this.jwtService.generateAccessToken(payload);
-    const refreshToken = this.jwtService.generateRefreshToken(payload);
+    const accessToken = this._jwtService.generateAccessToken(payload);
+    const refreshToken = this._jwtService.generateRefreshToken(payload);
 
-try {
-  const savedToken = await this.refreshTokenRepository.store({
-    userId: userObjectId,
-    userType: "User",
-    token: refreshToken.token,
-    expiresAt: refreshToken.expiresAt,
-  });
-const count = await this.refreshTokenRepository.findByToken(
-  refreshToken.token,
-);
+    try {
+      const savedToken = await this._refreshTokenRepository.store({
+        userId: userObjectId,
+        userType: "User",
+        token: refreshToken.token,
+        expiresAt: refreshToken.expiresAt,
+      });
+      const count = await this._refreshTokenRepository.findByToken(refreshToken.token);
 
-this.logger.info("Lookup immediately after save.", {
-  found: !!count,
-});
-  this.logger.info("Refresh token saved.", {
-    id: (savedToken as { _id?: unknown })._id,
-  });
-} catch (error) {
-  this.logger.error("Failed to save refresh token.", { error });
-  throw error;
-}
+      this._logger.info("Lookup immediately after save.", {
+        found: !!count,
+      });
+      this._logger.info("Refresh token saved.", {
+        id: (savedToken as { _id?: unknown })._id,
+      });
+    } catch (error) {
+      this._logger.error("Failed to save refresh token.", { error });
+      throw error;
+    }
 
-
-    // await this.refreshTokenRepository.store({
+    // await this._refreshTokenRepository.store({
     //   userId: userObjectId,
     //   userType: "User",
     //   token: refreshToken.token,
     //   expiresAt: refreshToken.expiresAt,
     // });
-    await this.userRepository.updateById(userId, {
+    await this._userRepository.updateById(userId, {
       lastLoginAt: new Date(),
     });
 
-    this.logger.info(LOG_MESSAGES.USER_LOGGED_IN, { userId });
+    this._logger.info(LOG_MESSAGES.USER_LOGGED_IN, { userId });
 
     return {
       accessToken,

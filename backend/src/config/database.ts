@@ -1,22 +1,20 @@
 import mongoose from "mongoose";
+
 import { env } from "./env.js";
-import { TYPES } from "../container/types.js";
 import { container } from "../container/index.js";
-import { ILogger } from "../shared/logger/ILogger.js";
+import { TYPES } from "../container/types.js";
+import { type ILogger } from "../shared/logger/ILogger.js";
 const logger = container.get<ILogger>(TYPES.Logger);
 export const connectDatabase = async (): Promise<void> => {
   try {
     await mongoose.connect(env.MONGO_URI);
 
-
-    console.log("Connected database:", mongoose.connection.name);
-console.log("Connected host:", mongoose.connection.host);
-console.log("Connected port:", mongoose.connection.port);
-console.log("Mongo URI:", env.MONGO_URI);
-
-// logger.info("Connected database:", mongoose.connection.name);
-// logger.info("Mongo URI:", env.MONGO_URI);
-    logger.info(" MongoDB connected successfully");
+    logger.info("MongoDB connected successfully.", {
+      database: mongoose.connection.name,
+      host: mongoose.connection.host,
+      port: mongoose.connection.port,
+      uri: env.MONGO_URI,
+    });
   } catch (error) {
     logger.error(" Failed to connect to MongoDB");
     logger.error("Failed to connect to MongoDB.", { error });

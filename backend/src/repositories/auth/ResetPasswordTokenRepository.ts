@@ -1,9 +1,10 @@
 import { injectable } from "inversify";
 
-import type { IResetPasswordTokenRepository } from "../../interfaces/repositories/auth/IResetPasswordTokenRepository";
-import type { IResetPasswordToken } from "../../models/ResetPasswordToken.model";
 import { ResetPasswordTokenModel } from "../../models/ResetPasswordToken.model";
 import { BaseRepository } from "../base/BaseRepository";
+
+import type { IResetPasswordTokenRepository } from "../../interfaces/repositories/auth/IResetPasswordTokenRepository";
+import type { IResetPasswordToken } from "../../models/ResetPasswordToken.model";
 
 @injectable()
 export class ResetPasswordTokenRepository

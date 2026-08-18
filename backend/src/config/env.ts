@@ -29,11 +29,9 @@ export const env = {
 
   JWT_REFRESH_SECRET: getEnv("JWT_REFRESH_SECRET"),
 
-  JWT_ACCESS_EXPIRES_IN:
-    process.env.JWT_ACCESS_EXPIRES_IN ?? "15m",
+  JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN ?? "15m",
 
-  JWT_REFRESH_EXPIRES_IN:
-    process.env.JWT_REFRESH_EXPIRES_IN ?? "7d",
+  JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN ?? "7d",
 
   SMTP_HOST: getEnv("SMTP_HOST"),
 

@@ -16,4 +16,10 @@ export const SUCCESS_MESSAGES = {
   PASSWORD_CHANGED_SUCCESS: "Password changed successfully.",
 
   DATA_FETCHED: "Data fetched successfully.",
+
+  PROVIDER_APPLICATION_SUBMITTED: "Provider application submitted successfully.",
+
+  PROVIDER_APPROVED: "Provider approved successfully.",
+
+  PROVIDER_REJECTED: "Provider rejected successfully.",
 } as const;

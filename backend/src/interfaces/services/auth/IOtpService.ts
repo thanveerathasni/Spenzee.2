@@ -1,12 +1,9 @@
 export interface IOtpService {
-    generateOtp(): string;
+  generateOtp(): string;
 
-    hashOtp(otp: string): Promise<string>;
+  hashOtp(otp: string): Promise<string>;
 
-    compareOtp(
-        plainOtp: string,
-        hashedOtp: string,
-    ): Promise<boolean>;
+  compareOtp(plainOtp: string, hashedOtp: string): Promise<boolean>;
 
-    getExpiryTime(minutes?: number): Date;
+  getExpiryTime(minutes?: number): Date;
 }

@@ -1,4 +1,5 @@
 import { Schema, model, type Types } from "mongoose";
+
 import { AuthProvider } from "../shared/enums/AuthProvider";
 
 export interface IUser {

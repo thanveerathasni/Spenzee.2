@@ -1,9 +1,10 @@
-import type { RequestHandler } from "express";
 
-import { HTTP_STATUS } from "../shared/constants/status/httpStatus";
 import { ERROR_MESSAGES } from "../shared/constants/messages/errorMessages";
+import { HTTP_STATUS } from "../shared/constants/status/httpStatus";
+import { type UserRole } from "../shared/enums/UserRole";
 import { AppError } from "../shared/errors/AppError";
-import { UserRole } from "../shared/enums/UserRole";
+
+import type { RequestHandler } from "express";
 
 export const authorize = (...roles: UserRole[]): RequestHandler => {
   return (req, _res, next): void => {

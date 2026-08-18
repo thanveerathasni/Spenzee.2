@@ -1,9 +1,10 @@
 import { injectable } from "inversify";
 
-import type { IRefreshTokenRepository } from "../../interfaces/repositories/auth/IRefreshTokenRepository";
-import type { IRefreshToken } from "../../models/RefreshToken.model";
 import { RefreshTokenModel } from "../../models/RefreshToken.model";
 import { BaseRepository } from "../base/BaseRepository";
+
+import type { IRefreshTokenRepository } from "../../interfaces/repositories/auth/IRefreshTokenRepository";
+import type { IRefreshToken } from "../../models/RefreshToken.model";
 
 @injectable()
 export class RefreshTokenRepository
@@ -20,15 +21,13 @@ export class RefreshTokenRepository
   //   return this.create(refreshToken);
   // }
 
-async store(
-  refreshToken: Pick<IRefreshToken, "userId" | "userType" | "token" | "expiresAt">,
-): Promise<IRefreshToken> {
+  async store(
+    refreshToken: Pick<IRefreshToken, "userId" | "userType" | "token" | "expiresAt">,
+  ): Promise<IRefreshToken> {
+    const result = await this.model.create(refreshToken);
 
-  const result = await this.model.create(refreshToken);
-
-
-  return result;
-}
+    return result;
+  }
 
   async findByToken(token: string): Promise<IRefreshToken | null> {
     return this.model.findOne({ token });

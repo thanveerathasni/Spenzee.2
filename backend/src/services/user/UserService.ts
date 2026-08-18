@@ -4,53 +4,40 @@ import { TYPES } from "../../container/types";
 
 import type { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
 import type { IUserService } from "../../interfaces/services/user/IUserService";
-
 import type { IUser } from "../../models/User.model";
 
 @injectable()
 export class UserService implements IUserService {
-    constructor(
-        @inject(TYPES.UserRepository)
-        private readonly userRepository: IUserRepository,
-    ) {}
+  constructor(
+    @inject(TYPES.UserRepository)
+    private readonly _userRepository: IUserRepository,
+  ) {}
 
-    async createUser(
-        user: Partial<IUser>,
-    ): Promise<IUser> {
-        const existingUser =
-            await this.userRepository.findByEmail(user.email!);
+  async createUser(user: Partial<IUser>): Promise<IUser> {
+    const existingUser = await this._userRepository.findByEmail(user.email!);
 
-        if (existingUser) {
-            throw new Error("Email already exists.");
-        }
-
-        return this.userRepository.create(user);
+    if (existingUser) {
+      throw new Error("Email already exists.");
     }
 
-    async getUserById(
-        id: string,
-    ): Promise<IUser | null> {
-        return this.userRepository.findById(id);
-    }
+    return this._userRepository.create(user);
+  }
 
-    async updateUser(
-        id: string,
-        user: Partial<IUser>,
-    ): Promise<IUser | null> {
-        return this.userRepository.updateById(id, user);
-    }
+  async getUserById(id: string): Promise<IUser | null> {
+    return this._userRepository.findById(id);
+  }
 
-    async getUserByEmail(
-        email: string,
-    ): Promise<IUser | null> {
-        return this.userRepository.findByEmail(email);
-    }
+  async updateUser(id: string, user: Partial<IUser>): Promise<IUser | null> {
+    return this._userRepository.updateById(id, user);
+  }
 
-async deleteUser(
-    id: string,
-): Promise<boolean> {
-    return this.userRepository.softDelete({
-        _id: id,
+  async getUserByEmail(email: string): Promise<IUser | null> {
+    return this._userRepository.findByEmail(email);
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    return this._userRepository.softDelete({
+      _id: id,
     });
-}
+  }
 }

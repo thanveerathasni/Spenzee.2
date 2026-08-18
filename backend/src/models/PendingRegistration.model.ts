@@ -1,11 +1,6 @@
-import mongoose, {
-  type Document,
-  type Model,
-  Schema,
-} from "mongoose";
+import mongoose, { type Document, type Model, Schema } from "mongoose";
 
-export interface IPendingRegistration
-  extends Document {
+export interface IPendingRegistration extends Document {
   firstName: string;
 
   lastName: string;
@@ -23,51 +18,49 @@ export interface IPendingRegistration
   updatedAt: Date;
 }
 
-const pendingRegistrationSchema =
-  new Schema<IPendingRegistration>(
-    {
-      firstName: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-
-      lastName: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-
-      email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true,
-      },
-
-      password: {
-        type: String,
-        required: true,
-      },
-
-      expiresAt: {
-        type: Date,
-        required: true,
-      },
-
-      deletedAt: {
-        type: Date,
-        default: null,
-      },
+const pendingRegistrationSchema = new Schema<IPendingRegistration>(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    {
-      timestamps: true,
+
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
     },
-  );
 
-// indexes 
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
 
+    password: {
+      type: String,
+      required: true,
+    },
+
+    expiresAt: {
+      type: Date,
+      required: true,
+    },
+
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+// indexes
 
 pendingRegistrationSchema.index(
   {
@@ -87,7 +80,4 @@ pendingRegistrationSchema.index({
 });
 
 export const PendingRegistrationModel: Model<IPendingRegistration> =
-  mongoose.model<IPendingRegistration>(
-    "PendingRegistration",
-    pendingRegistrationSchema,
-  );
+  mongoose.model<IPendingRegistration>("PendingRegistration", pendingRegistrationSchema);

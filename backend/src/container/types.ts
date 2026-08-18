@@ -36,13 +36,14 @@ export const TYPES = {
   // Admin Services
   AdminSeedService: Symbol.for("AdminSeedService"),
   AdminLoginService: Symbol.for("AdminLoginService"),
+  AdminProviderService: Symbol.for("AdminProviderService"),
 
   // Provider Services
   ApplyProviderService: Symbol.for("ApplyProviderService"),
 
   // Middleware
   AuthMiddleware: Symbol.for("AuthMiddleware"),
-
+  AdminAuthMiddleware: Symbol.for("AdminAuthMiddleware"),
   // Controllers
   UserController: Symbol.for("UserController"),
   AuthController: Symbol.for("AuthController"),

@@ -1,11 +1,12 @@
-import type { NextFunction, Request, Response } from "express";
-import type { ZodSchema } from "zod";
 
 import { ZodError } from "zod";
 
-import { HTTP_STATUS } from "../shared/constants/status/httpStatus";
 import { ERROR_MESSAGES } from "../shared/constants/messages/errorMessages";
+import { HTTP_STATUS } from "../shared/constants/status/httpStatus";
 import { errorResponse } from "../shared/responses/errorResponse";
+
+import type { NextFunction, Request, Response } from "express";
+import type { ZodSchema } from "zod";
 
 export const validate =
   (schema: ZodSchema) =>
