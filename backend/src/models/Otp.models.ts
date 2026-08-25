@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 
+// store in redis 
 export interface IOtp {
   email: string;
   code: string;

@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 
 import { inject, injectable } from "inversify";
 
+import { env } from "../../config/env";
 import { TYPES } from "../../container/types";
 import { AUTH_TOKEN_EXPIRY } from "../../shared/constants/auth";
 import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
@@ -9,7 +10,6 @@ import { LOG_MESSAGES } from "../../shared/constants/messages/logMessages";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
 import { ProviderStatus } from "../../shared/enums/ProviderStatus";
 import { AppError } from "../../shared/errors/AppError";
-
 
 import type { ForgotPasswordDto } from "../../dtos/auth/ForgotPassword.dto";
 import type { IProviderRepository } from "../../interfaces/repositories/provider/IProviderRepository";
@@ -44,10 +44,12 @@ export class ProviderForgotPasswordService
     try {
       const provider = await this._providerRepository.findByEmail(data.email);
 
-if (provider?.status !== ProviderStatus.ACTIVE) {        this._logger.info(LOG_MESSAGES.PASSWORD_RESET_REQUESTED, {
+      if (provider?.status !== ProviderStatus.ACTIVE) {
+        this._logger.info(LOG_MESSAGES.PASSWORD_RESET_REQUESTED, {
           email: data.email,
           accountFound: false,
         });
+
         return;
       }
 
@@ -59,6 +61,7 @@ if (provider?.status !== ProviderStatus.ACTIVE) {        this._logger.info(LOG_M
       }
 
       const resetToken = randomBytes(32).toString("hex");
+
       const hashedToken = await this._passwordService.hash(resetToken);
 
       const expiresAt = new Date(
@@ -72,9 +75,14 @@ if (provider?.status !== ProviderStatus.ACTIVE) {        this._logger.info(LOG_M
         expiresAt,
       );
 
+      const resetUrl =
+        `${env.FRONTEND_URL}/provider/reset-password` +
+        `?email=${encodeURIComponent(provider.email)}` +
+        `&token=${encodeURIComponent(resetToken)}`;
+
       await this._emailService.sendPasswordResetEmail(
         provider.email,
-        resetToken,
+        resetUrl,
       );
 
       this._logger.info(LOG_MESSAGES.PASSWORD_RESET_REQUESTED, {

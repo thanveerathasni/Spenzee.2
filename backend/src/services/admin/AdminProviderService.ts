@@ -51,6 +51,7 @@ private readonly _emailService: IEmailService,
     );
     await this._emailService.sendProviderPasswordSetupEmail(
   provider.email,
+  providerId,
   token,
 );
   }

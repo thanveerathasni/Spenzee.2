@@ -13,12 +13,14 @@ export class ProviderRepository extends BaseRepository<IProvider> implements IPr
     super(ProviderModel);
   }
 
-  async findByEmail(email: string): Promise<IProvider | null> {
-    return this.model.findOne({
+async findByEmail(email: string): Promise<IProvider | null> {
+  return this.model
+    .findOne({
       email: email.trim().toLowerCase(),
       deletedAt: null,
-    });
-  }
+    })
+    .select("+password");
+}
 
   async findByStatus(status: ProviderStatus): Promise<IProvider[]> {
     return this.model.find({
