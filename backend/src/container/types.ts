@@ -2,8 +2,6 @@ export const TYPES = {
   Logger: Symbol.for("Logger"),
 
   // Auth
-  AuthRepository: Symbol.for("AuthRepository"),
-  AuthService: Symbol.for("AuthService"),
 
   // Repositories
   UserRepository: Symbol.for("UserRepository"),

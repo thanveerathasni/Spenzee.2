@@ -3,6 +3,7 @@ import { Router } from "express";
 import { container } from "../../container";
 import { TYPES } from "../../container/types";
 import { validate } from "../../middlewares/validate";
+import { PROVIDER_ROUTES } from "../../shared/constants";
 import { forgotPasswordSchema } from "../../validators/auth/ForgotPasswordValidator";
 import { loginSchema } from "../../validators/auth/LoginValidator";
 import { resetPasswordSchema } from "../../validators/auth/ResetPasswordValidator";
@@ -41,31 +42,31 @@ const resetPasswordController =
   );
 
 router.post(
-  "/apply",
+  PROVIDER_ROUTES.APPLY,
   validate(providerApplicationSchema),
   providerController.apply,
 );
 
 router.post(
-  "/login",
+  PROVIDER_ROUTES.LOGIN,
   validate(loginSchema),
   loginController.login,
 );
 
 router.post(
-  "/forgot-password",
+  PROVIDER_ROUTES.FORGOT_PASSWORD,
   validate(forgotPasswordSchema),
   forgotPasswordController.forgotPassword,
 );
 
 router.post(
-  "/reset-password",
+  PROVIDER_ROUTES.RESET_PASSWORD,
   validate(resetPasswordSchema),
   resetPasswordController.resetPassword,
 );
 
 router.post(
-  "/setup-password",
+  PROVIDER_ROUTES.SETUP_PASSWORD,
   validate(providerPasswordSetupSchema),
   passwordSetupController.setupPassword,
 );
