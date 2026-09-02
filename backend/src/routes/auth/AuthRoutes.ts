@@ -9,9 +9,9 @@ import { forgotPasswordSchema } from "../../validators/auth/ForgotPasswordValida
 import { loginSchema } from "../../validators/auth/LoginValidator";
 import { logoutSchema } from "../../validators/auth/LogoutValidator";
 import { refreshTokenSchema } from "../../validators/auth/RefreshTokenValidator";
-import { registerUserSchema } from "../../validators/auth/registerUser.validator";
+import { registerUserSchema } from "../../validators/auth/RegisterUserValidator";
 import { resetPasswordSchema } from "../../validators/auth/ResetPasswordValidator";
-import { verifyOtpSchema } from "../../validators/auth/verifyOtp.validator";
+import { verifyOtpSchema } from "../../validators/auth/VerifyOtpValidator";
 
 import type { IAuthController } from "../../interfaces/controllers/auth/IAuthController";
 import type { IAuthMiddleware } from "../../interfaces/middlewares/IAuthMiddleware";

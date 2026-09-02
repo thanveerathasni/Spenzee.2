@@ -15,6 +15,7 @@ import type { IPasswordService } from "../../interfaces/services/auth/IPasswordS
 import type { IRegisterUserService } from "../../interfaces/services/auth/IRegisterUserService";
 import type { IEmailService } from "../../interfaces/services/email/IEmailService";
 import type { ILogger } from "../../shared/logger/ILogger";
+
 @injectable()
 export class RegisterUserService implements IRegisterUserService {
   constructor(
@@ -52,6 +53,7 @@ export class RegisterUserService implements IRegisterUserService {
       this._pendingRegistrationRepository.findByEmail(data.email),
       this._otpRepository.findByEmail(data.email),
     ]);
+
     const otp = this._otpService.generateOtp();
     const hashedOtp = await this._otpService.hashOtp(otp);
     const expiresAt = this._otpService.getExpiryTime(10);
@@ -73,11 +75,14 @@ export class RegisterUserService implements IRegisterUserService {
         expiresAt,
       });
     }
-    this._logger.info(otp, { email: data.email, message: LOG_MESSAGES.OTP_GENERATED });
+
+    this._logger.info(LOG_MESSAGES.OTP_GENERATED, { email: data.email });
+
     if (existingOtp) {
       await this._otpRepository.updateByEmail(data.email, {
         code: hashedOtp,
         expiresAt: otpExpiresAt,
+        attempts: 0,
       });
     } else {
       await this._otpRepository.create({

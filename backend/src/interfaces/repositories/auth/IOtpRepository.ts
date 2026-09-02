@@ -7,7 +7,7 @@ export interface IOtpRepository {
 
   updateByEmail(
     email: string,
-    data: Partial<Pick<IOtp, "code" | "expiresAt">>,
+    data: Partial<Pick<IOtp, "code" | "expiresAt" | "attempts">>,
   ): Promise<IOtp | null>;
 
   incrementAttempts(email: string): Promise<IOtp | null>;

@@ -1,6 +1,5 @@
 import { injectable } from "inversify";
 
-
 import { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
 import { IOtp, OtpModel } from "../../models/Otp.models";
 import { BaseRepository } from "../base/BaseRepository";
@@ -21,7 +20,7 @@ export class OtpRepository extends BaseRepository<IOtp> implements IOtpRepositor
 
   async updateByEmail(
     email: string,
-    data: Partial<Pick<IOtp, "code" | "expiresAt">>,
+    data: Partial<Pick<IOtp, "code" | "expiresAt" | "attempts">>,
   ): Promise<IOtp | null> {
     return this.updateOne({ email }, data);
   }

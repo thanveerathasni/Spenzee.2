@@ -2,3 +2,8 @@ export const AUTH_TOKEN_EXPIRY = {
   RESET_PASSWORD_MINUTES: 15,
   PROVIDER_PASSWORD_SETUP_MINUTES: 15,
 } as const;
+
+export const AUTH_OTP_CONFIG = {
+  EXPIRY_MINUTES: 5,
+  MAX_ATTEMPTS: 5,
+} as const;

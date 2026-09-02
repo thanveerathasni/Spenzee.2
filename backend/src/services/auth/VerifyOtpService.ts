@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 
 import { TYPES } from "../../container/types";
+import { AUTH_OTP_CONFIG } from "../../shared/constants/auth";
 import { AUTH_MESSAGES } from "../../shared/constants/messages/AuthMessages";
 import { LOG_MESSAGES } from "../../shared/constants/messages/logMessages";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
@@ -56,10 +57,23 @@ export class VerifyOtpService implements IVerifyOtpService {
       throw new AppError(AUTH_MESSAGES.OTP_EXPIRED, HTTP_STATUS.BAD_REQUEST);
     }
 
+    if (storedOtp.attempts >= AUTH_OTP_CONFIG.MAX_ATTEMPTS) {
+      await this._otpRepository.deleteByEmail(email);
+      this.logFailure(email, "maximum OTP attempts exceeded");
+      throw new AppError(AUTH_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
+    }
+
     const isValid = await this._otpService.compareOtp(otp, storedOtp.code);
 
     if (!isValid) {
-      await this._otpRepository.incrementAttempts(email);
+      const updatedOtp = await this._otpRepository.incrementAttempts(email);
+
+      if (updatedOtp?.attempts !== undefined) {
+        if (updatedOtp.attempts >= AUTH_OTP_CONFIG.MAX_ATTEMPTS) {
+          await this._otpRepository.deleteByEmail(email);
+        }
+      }
+
       this.logFailure(email, "OTP does not match");
       throw new AppError(AUTH_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
     }
@@ -73,6 +87,7 @@ export class VerifyOtpService implements IVerifyOtpService {
 
     await this._otpRepository.deleteByEmail(email);
     await this._pendingRegistrationRepository.deleteByEmail(email);
+
     this._logger.info(LOG_MESSAGES.OTP_VERIFIED, { email });
   }
 

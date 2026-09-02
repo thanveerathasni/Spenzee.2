@@ -2,11 +2,11 @@ import bcrypt from "bcrypt";
 import { injectable } from "inversify";
 
 import { IOtpService } from "../../interfaces/services/auth/IOtpService";
+import { AUTH_OTP_CONFIG } from "../../shared/constants/auth";
 
 @injectable()
 export class OtpService implements IOtpService {
   private readonly _saltRounds = 10;
-  private readonly _expiryMinutes = 5;
 
   generateOtp(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -20,7 +20,7 @@ export class OtpService implements IOtpService {
     return bcrypt.compare(plainOtp, hashedOtp);
   }
 
-  getExpiryTime(minutes: number = this._expiryMinutes): Date {
+  getExpiryTime(minutes: number = AUTH_OTP_CONFIG.EXPIRY_MINUTES): Date {
     return new Date(Date.now() + minutes * 60 * 1000);
   }
 }
