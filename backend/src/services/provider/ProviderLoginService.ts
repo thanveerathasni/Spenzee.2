@@ -1,16 +1,15 @@
 import { inject, injectable } from "inversify";
 
 import { TYPES } from "../../container/types";
+import { AuthMapper } from "../../mappers/auth/AuthMapper";
 import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
 import { ProviderStatus } from "../../shared/enums/ProviderStatus";
 import { UserRole } from "../../shared/enums/UserRole";
 import { AppError } from "../../shared/errors/AppError";
 
-import type {
-  LoginRequestDto,
-  LoginResponseDto,
-} from "../../dtos/auth/LoginRequest.dto";
+import type { LoginRequestDto } from "../../dtos/auth/LoginRequest.dto";
+import type { ProviderLoginResponseDto } from "../../dtos/auth/ProviderLoginResponse.dto";
 import type { IRefreshTokenRepository } from "../../interfaces/repositories/auth/IRefreshTokenRepository";
 import type { IProviderRepository } from "../../interfaces/repositories/provider/IProviderRepository";
 import type { IJwtService } from "../../interfaces/services/auth/IJwtService";
@@ -33,10 +32,10 @@ export class ProviderLoginService implements IProviderLoginService {
     private readonly _refreshTokenRepository: IRefreshTokenRepository,
   ) {}
 
-  async execute(data: LoginRequestDto): Promise<LoginResponseDto> {
+  async execute(data: LoginRequestDto): Promise<ProviderLoginResponseDto> {
     const provider = await this._providerRepository.findByEmail(data.email);
 
-    if ( !provider?.password) {
+    if (!provider?.password) {
       throw new AppError(
         ERROR_MESSAGES.INVALID_CREDENTIALS,
         HTTP_STATUS.UNAUTHORIZED,
@@ -93,17 +92,10 @@ export class ProviderLoginService implements IProviderLoginService {
       lastLoginAt: new Date(),
     });
 
-  return {
-  accessToken,
-  refreshToken: refreshToken.token,
-  user: {
-    id: providerId,
-    firstName: "",
-    lastName: "",
-    email: provider.email,
-    isActive: true,
-    isVerified: true,
-  },
-};
+    return AuthMapper.toProviderLoginResponse(
+      provider,
+      accessToken,
+      refreshToken.token,
+    );
   }
 }

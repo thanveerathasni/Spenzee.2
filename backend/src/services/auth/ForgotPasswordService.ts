@@ -59,15 +59,6 @@ export class ForgotPasswordService implements IForgotPasswordService {
           AUTH_TOKEN_EXPIRY.RESET_PASSWORD_MINUTES * 60 * 1000,
       );
 
-      if (process.env.NODE_ENV === "development") {
-        this._logger.info(
-          "Development password reset token generated.",
-          {
-            email: user.email,
-            resetToken,
-          },
-        );
-      }
 
       await this._resetPasswordTokenRepository.upsertByEmail(
         user.email,
