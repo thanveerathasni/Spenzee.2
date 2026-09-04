@@ -1,13 +1,12 @@
 import { injectable } from "inversify";
 
 import { IUser, UserModel } from "../../models/User.model";
-import { SoftDeleteRepository } from "../base/SoftDeleteRepository";
+import { BaseRepository } from "../base/BaseRepository";
 
 import type { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
 
-
 @injectable()
-export class UserRepository extends SoftDeleteRepository<IUser> implements IUserRepository {
+export class UserRepository extends BaseRepository<IUser> implements IUserRepository {
   constructor() {
     super(UserModel);
   }
