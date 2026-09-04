@@ -16,6 +16,7 @@ const OtpSchema = new Schema<IOtp>(
   {
     email: {
       type: String,
+      unique: true,
       required: true,
       lowercase: true,
       trim: true,
@@ -43,7 +44,6 @@ const OtpSchema = new Schema<IOtp>(
   },
 );
 
-// OtpSchema.index({ email: 1 });
 OtpSchema.index({
   deletedAt: 1,
 });
