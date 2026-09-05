@@ -4,6 +4,7 @@ import { Transporter } from "nodemailer";
 import { env } from "../../config/env";
 import { transporter } from "../../config/mail";
 import { TYPES } from "../../container/types";
+import { AUTH_OTP_CONFIG } from "../../shared/constants/auth";
 
 import type { IEmailService } from "../../interfaces/services/email/IEmailService";
 import type { ILogger } from "../../shared/logger/ILogger";
@@ -52,7 +53,9 @@ export class EmailService implements IEmailService {
               ${otp}
             </div>
 
-            <p>This OTP is valid for 5 minutes.</p>
+            <p>
+              This OTP is valid for ${AUTH_OTP_CONFIG.EXPIRY_MINUTES} minutes.
+            </p>
 
             <p>
               If you didn't request this, you can safely ignore this email.
