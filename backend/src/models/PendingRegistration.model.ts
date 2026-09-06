@@ -60,8 +60,6 @@ const pendingRegistrationSchema = new Schema<IPendingRegistration>(
   },
 );
 
-// indexes
-
 pendingRegistrationSchema.index(
   {
     expiresAt: 1,
@@ -70,10 +68,6 @@ pendingRegistrationSchema.index(
     expireAfterSeconds: 0,
   },
 );
-
-// pendingRegistrationSchema.index({
-//   email: 1,
-// });
 
 pendingRegistrationSchema.index({
   deletedAt: 1,
