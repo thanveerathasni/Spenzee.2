@@ -34,7 +34,7 @@ export class PendingRegistrationRepository
     return this.updateOne({ email }, data);
   }
   async deleteByEmail(email: string): Promise<boolean> {
-    return this.softDelete({
+    return this.forceDelete({
       email,
     });
   }
