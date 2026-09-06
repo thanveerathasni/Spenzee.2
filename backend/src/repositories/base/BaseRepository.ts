@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { Model } from "mongoose";
+import { Model, type UpdateQuery } from "mongoose";
 
 import { IBaseRepository } from "../../interfaces/repositories/base/IBaseRepository";
 
@@ -53,14 +53,14 @@ export abstract class BaseRepository<
 
     async updateById(
         id: string,
-        data: Partial<T>,
+        update: UpdateQuery<T>,
     ): Promise<T | null> {
         return this.model.findOneAndUpdate(
             {
                 _id: id,
                 deletedAt: null,
             },
-            data,
+            update,
             {
                 new: true,
             },
@@ -69,11 +69,11 @@ export abstract class BaseRepository<
 
     async updateOne(
         filter: Record<string, unknown>,
-        data: Partial<T>,
+        update: UpdateQuery<T>,
     ): Promise<T | null> {
         return this.model.findOneAndUpdate(
             this.buildFilter(filter),
-            data,
+            update,
             {
                 new: true,
             },
