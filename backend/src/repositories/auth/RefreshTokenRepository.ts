@@ -15,18 +15,13 @@ export class RefreshTokenRepository
     super(RefreshTokenModel);
   }
 
-  // async store(
-  //   refreshToken: Pick<IRefreshToken, "userId" | "userType" | "token" | "expiresAt">,
-  // ): Promise<IRefreshToken> {
-  //   return this.create(refreshToken);
-  // }
-
   async store(
-    refreshToken: Pick<IRefreshToken, "userId" | "userType" | "token" | "expiresAt">,
+    refreshToken: Pick<
+      IRefreshToken,
+      "userId" | "userType" | "token" | "expiresAt"
+    >,
   ): Promise<IRefreshToken> {
-    const result = await this.model.create(refreshToken);
-
-    return result;
+    return this.create(refreshToken);
   }
 
   async findByToken(token: string): Promise<IRefreshToken | null> {
