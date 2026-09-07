@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 
 export interface IResetPasswordToken {
-  deletedAt?: Date | null;
   email: string;
   token: string;
   expiresAt: Date;
@@ -33,8 +32,14 @@ const ResetPasswordTokenSchema = new Schema<IResetPasswordToken>(
   },
 );
 
-ResetPasswordTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-// ResetPasswordTokenSchema.index({ email: 1 }, { unique: true });
+ResetPasswordTokenSchema.index(
+  {
+    expiresAt: 1,
+  },
+  {
+    expireAfterSeconds: 0,
+  },
+);
 
 export const ResetPasswordTokenModel = model<IResetPasswordToken>(
   "ResetPasswordToken",
