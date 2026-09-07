@@ -1,37 +1,28 @@
-import mongoose, { type Document, type Model, Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
-export interface IPendingRegistration extends Document {
+export interface IPendingRegistration {
   firstName: string;
-
   lastName: string;
-
   email: string;
-
   password: string;
-
   expiresAt: Date;
-
   deletedAt: Date | null;
-
   createdAt: Date;
-
   updatedAt: Date;
 }
 
-const pendingRegistrationSchema = new Schema<IPendingRegistration>(
+const PendingRegistrationSchema = new Schema<IPendingRegistration>(
   {
     firstName: {
       type: String,
       required: true,
       trim: true,
     },
-
     lastName: {
       type: String,
       required: true,
       trim: true,
     },
-
     email: {
       type: String,
       required: true,
@@ -39,17 +30,14 @@ const pendingRegistrationSchema = new Schema<IPendingRegistration>(
       lowercase: true,
       trim: true,
     },
-
     password: {
       type: String,
       required: true,
     },
-
     expiresAt: {
       type: Date,
       required: true,
     },
-
     deletedAt: {
       type: Date,
       default: null,
@@ -57,10 +45,11 @@ const pendingRegistrationSchema = new Schema<IPendingRegistration>(
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 );
 
-pendingRegistrationSchema.index(
+PendingRegistrationSchema.index(
   {
     expiresAt: 1,
   },
@@ -69,9 +58,11 @@ pendingRegistrationSchema.index(
   },
 );
 
-pendingRegistrationSchema.index({
+PendingRegistrationSchema.index({
   deletedAt: 1,
 });
 
-export const PendingRegistrationModel: Model<IPendingRegistration> =
-  mongoose.model<IPendingRegistration>("PendingRegistration", pendingRegistrationSchema);
+export const PendingRegistrationModel = model<IPendingRegistration>(
+  "PendingRegistration",
+  PendingRegistrationSchema,
+);
