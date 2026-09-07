@@ -1,16 +1,23 @@
 import { injectable } from "inversify";
 
-import { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
-import { IOtp, OtpModel } from "../../models/Otp.models";
 import { BaseRepository } from "../base/BaseRepository";
 
+import type { IOtpRepository } from "../../interfaces/repositories/auth/IOtpRepository";
+import type { IOtp } from "../../models/Otp.models";
+import { OtpModel } from "../../models/Otp.models";
+
 @injectable()
-export class OtpRepository extends BaseRepository<IOtp> implements IOtpRepository {
+export class OtpRepository
+  extends BaseRepository<IOtp>
+  implements IOtpRepository
+{
   constructor() {
     super(OtpModel);
   }
 
-  async create(data: Pick<IOtp, "email" | "code" | "expiresAt">): Promise<IOtp> {
+  async create(
+    data: Pick<IOtp, "email" | "code" | "expiresAt">,
+  ): Promise<IOtp> {
     return super.create(data);
   }
 

@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 
-// store in redis 
 export interface IOtp {
   email: string;
   code: string;
@@ -8,7 +7,6 @@ export interface IOtp {
   attempts: number;
   createdAt: Date;
   updatedAt: Date;
-
   deletedAt: Date | null;
 }
 
@@ -47,6 +45,14 @@ const OtpSchema = new Schema<IOtp>(
 OtpSchema.index({
   deletedAt: 1,
 });
-OtpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+OtpSchema.index(
+  {
+    expiresAt: 1,
+  },
+  {
+    expireAfterSeconds: 0,
+  },
+);
 
 export const OtpModel = model<IOtp>("Otp", OtpSchema);
