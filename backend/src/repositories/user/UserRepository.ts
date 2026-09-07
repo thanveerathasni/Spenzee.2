@@ -1,12 +1,16 @@
 import { injectable } from "inversify";
 
-import { IUser, UserModel } from "../../models/User.model";
+import { UserModel } from "../../models/User.model";
 import { BaseRepository } from "../base/BaseRepository";
 
 import type { IUserRepository } from "../../interfaces/repositories/user/IUserRepository";
+import type { IUser } from "../../models/User.model";
 
 @injectable()
-export class UserRepository extends BaseRepository<IUser> implements IUserRepository {
+export class UserRepository
+  extends BaseRepository<IUser>
+  implements IUserRepository
+{
   constructor() {
     super(UserModel);
   }
@@ -16,6 +20,11 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   }
 
   async findLoginUserByEmail(email: string): Promise<IUser | null> {
-    return this.model.findOne({ email }).select("+password");
+    return this.model
+      .findOne({
+        email,
+        deletedAt: null,
+      })
+      .select("+password");
   }
 }
