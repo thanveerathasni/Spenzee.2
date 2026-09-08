@@ -34,7 +34,6 @@ const UserVerificationSchema = new Schema<IUserVerification>(
   },
 );
 
-// UserVerificationSchema.index({ email: 1 }, { unique: true });
 UserVerificationSchema.index({ status: 1 });
 
 export const UserVerificationModel = model<IUserVerification>(
