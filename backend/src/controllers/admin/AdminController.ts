@@ -9,6 +9,7 @@ import { asyncHandler } from "../../shared/utils/asyncHandler";
 import type { IAdminController } from "../../interfaces/controllers/admin/IAdminController";
 import type { IAdminLoginService } from "../../interfaces/services/admin/IAdminLoginService";
 import type { IAdminProviderService } from "../../interfaces/services/admin/IAdminProviderService";
+import type { IAdminUserService } from "../../interfaces/services/admin/IAdminUserService";
 import type { Request, Response } from "express";
 
 @injectable()
@@ -19,29 +20,80 @@ export class AdminController implements IAdminController {
 
     @inject(TYPES.AdminProviderService)
     private readonly _adminProviderService: IAdminProviderService,
+
+    @inject(TYPES.AdminUserService)
+    private readonly _adminUserService: IAdminUserService,
   ) {}
 
   login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const loginResponse = await this._adminLoginService.execute(req.body);
 
-    successResponse(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.LOGIN_SUCCESS, loginResponse);
+    successResponse(
+      res,
+      HTTP_STATUS.OK,
+      SUCCESS_MESSAGES.LOGIN_SUCCESS,
+      loginResponse,
+    );
   });
 
-  getPendingProviders = asyncHandler(async (_req: Request, res: Response): Promise<void> => {
-    const providers = await this._adminProviderService.getPendingProviders();
+  getPendingProviders = asyncHandler(
+    async (_req: Request, res: Response): Promise<void> => {
+      const providers = await this._adminProviderService.getPendingProviders();
 
-    successResponse(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.DATA_FETCHED, providers);
-  });
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.DATA_FETCHED,
+        providers,
+      );
+    },
+  );
 
-  approveProvider = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    await this._adminProviderService.approveProvider(req.params.id as string);
+  approveProvider = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      await this._adminProviderService.approveProvider(req.params.id as string);
 
-    successResponse(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.PROVIDER_APPROVED);
-  });
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.PROVIDER_APPROVED,
+      );
+    },
+  );
 
-  rejectProvider = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    await this._adminProviderService.rejectProvider(req.params.id as string);
+  rejectProvider = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      await this._adminProviderService.rejectProvider(req.params.id as string);
 
-    successResponse(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.PROVIDER_REJECTED);
-  });
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.PROVIDER_REJECTED,
+      );
+    },
+  );
+
+  blockUser = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      await this._adminUserService.blockUser(req.params.id as string);
+
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.USER_BLOCKED,
+      );
+    },
+  );
+
+  unblockUser = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      await this._adminUserService.unblockUser(req.params.id as string);
+
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.USER_UNBLOCKED,
+      );
+    },
+  );
 }

@@ -5,6 +5,10 @@ export const SUCCESS_MESSAGES = {
 
   USER_DELETED: "User deleted successfully.",
 
+  USER_BLOCKED: "User blocked successfully.",
+
+  USER_UNBLOCKED: "User unblocked successfully.",
+
   LOGIN_SUCCESS: "Login successful.",
 
   REFRESH_TOKEN_SUCCESS: "Token refreshed successfully.",
@@ -17,12 +21,13 @@ export const SUCCESS_MESSAGES = {
 
   DATA_FETCHED: "Data fetched successfully.",
 
-  PROVIDER_APPLICATION_SUBMITTED: "Provider application submitted successfully.",
+  PROVIDER_APPLICATION_SUBMITTED:
+    "Provider application submitted successfully.",
 
   PROVIDER_APPROVED: "Provider approved successfully.",
 
   PROVIDER_REJECTED: "Provider rejected successfully.",
 
-
-  PROVIDER_PASSWORD_SETUP_SUCCESS: "Provider password setup completed successfully.",
+  PROVIDER_PASSWORD_SETUP_SUCCESS:
+    "Provider password setup completed successfully.",
 } as const;

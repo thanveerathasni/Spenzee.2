@@ -5,4 +5,6 @@ export interface IAdminController {
   getPendingProviders: RequestHandler;
   approveProvider: RequestHandler;
   rejectProvider: RequestHandler;
+  blockUser: RequestHandler;
+  unblockUser: RequestHandler;
 }
