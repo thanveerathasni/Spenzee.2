@@ -19,9 +19,12 @@ export const PROVIDER_ROUTES = {
 
 export const ADMIN_ROUTES = {
   LOGIN: "/login",
+
   PENDING_PROVIDERS: "/providers/pending",
   APPROVE_PROVIDER: "/providers/:id/approve",
   REJECT_PROVIDER: "/providers/:id/reject",
+
+  USERS: "/users",
   BLOCK_USER: "/users/:id/block",
   UNBLOCK_USER: "/users/:id/unblock",
 } as const;

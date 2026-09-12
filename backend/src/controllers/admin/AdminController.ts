@@ -73,6 +73,19 @@ export class AdminController implements IAdminController {
     },
   );
 
+  getUsers = asyncHandler(
+    async (_req: Request, res: Response): Promise<void> => {
+      const users = await this._adminUserService.getUsers();
+
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.DATA_FETCHED,
+        users,
+      );
+    },
+  );
+
   blockUser = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {
       await this._adminUserService.blockUser(req.params.id as string);

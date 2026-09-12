@@ -44,7 +44,14 @@ router.patch(
   adminAuthMiddleware.authenticate,
   adminController.rejectProvider,
 );
+
 // Admin user management
+router.get(
+  ADMIN_ROUTES.USERS,
+  adminAuthMiddleware.authenticate,
+  adminController.getUsers,
+);
+
 router.patch(
   ADMIN_ROUTES.BLOCK_USER,
   adminAuthMiddleware.authenticate,
@@ -56,6 +63,5 @@ router.patch(
   adminAuthMiddleware.authenticate,
   adminController.unblockUser,
 );
-
 
 export default router;
