@@ -54,7 +54,6 @@ export const TYPES = {
 
   // Middleware
   AuthMiddleware: Symbol.for("AuthMiddleware"),
-  AdminAuthMiddleware: Symbol.for("AdminAuthMiddleware"),
 
   // Controllers
   UserController: Symbol.for("UserController"),

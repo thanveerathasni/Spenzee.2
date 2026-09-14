@@ -1,5 +1,4 @@
 import { AdminController } from "../../controllers/admin/AdminController";
-import { AdminAuthMiddleware } from "../../middlewares/AdminAuthMiddleware";
 import { AdminRepository } from "../../repositories/admin/AdminRepository";
 import { AdminLoginService } from "../../services/admin/AdminLoginService";
 import { AdminProviderService } from "../../services/admin/AdminProviderService";
@@ -8,7 +7,6 @@ import { AdminUserService } from "../../services/admin/AdminUserService";
 import { TYPES } from "../types";
 
 import type { IAdminController } from "../../interfaces/controllers/admin/IAdminController";
-import type { IAuthMiddleware } from "../../interfaces/middlewares/IAuthMiddleware";
 import type { IAdminRepository } from "../../interfaces/repositories/admin/IAdminRepository";
 import type { IAdminLoginService } from "../../interfaces/services/admin/IAdminLoginService";
 import type { IAdminProviderService } from "../../interfaces/services/admin/IAdminProviderService";
@@ -40,8 +38,4 @@ export function registerAdminBindings(container: Container): void {
   container
     .bind<IAdminController>(TYPES.AdminController)
     .to(AdminController);
-
-  container
-    .bind<IAuthMiddleware>(TYPES.AdminAuthMiddleware)
-    .to(AdminAuthMiddleware);
 }

@@ -3,7 +3,9 @@ import { Router } from "express";
 import { container } from "../../container";
 import { TYPES } from "../../container/types";
 import { validate } from "../../middlewares/validate";
+import { authorize } from "../../middlewares/AuthorizationMiddleware";
 import { ADMIN_ROUTES } from "../../shared/constants";
+import { UserRole } from "../../shared/enums/UserRole";
 import { loginSchema } from "../../validators/auth/LoginValidator";
 
 import type { IAdminController } from "../../interfaces/controllers/admin/IAdminController";
@@ -15,9 +17,11 @@ const adminController = container.get<IAdminController>(
   TYPES.AdminController,
 );
 
-const adminAuthMiddleware = container.get<IAuthMiddleware>(
-  TYPES.AdminAuthMiddleware,
+const authMiddleware = container.get<IAuthMiddleware>(
+  TYPES.AuthMiddleware,
 );
+
+const adminAuthorization = authorize(UserRole.ADMIN);
 
 // Admin login
 router.post(
@@ -29,38 +33,44 @@ router.post(
 // Admin provider management
 router.get(
   ADMIN_ROUTES.PENDING_PROVIDERS,
-  adminAuthMiddleware.authenticate,
+  authMiddleware.authenticate,
+  adminAuthorization,
   adminController.getPendingProviders,
 );
 
 router.patch(
   ADMIN_ROUTES.APPROVE_PROVIDER,
-  adminAuthMiddleware.authenticate,
+  authMiddleware.authenticate,
+  adminAuthorization,
   adminController.approveProvider,
 );
 
 router.patch(
   ADMIN_ROUTES.REJECT_PROVIDER,
-  adminAuthMiddleware.authenticate,
+  authMiddleware.authenticate,
+  adminAuthorization,
   adminController.rejectProvider,
 );
 
 // Admin user management
 router.get(
   ADMIN_ROUTES.USERS,
-  adminAuthMiddleware.authenticate,
+  authMiddleware.authenticate,
+  adminAuthorization,
   adminController.getUsers,
 );
 
 router.patch(
   ADMIN_ROUTES.BLOCK_USER,
-  adminAuthMiddleware.authenticate,
+  authMiddleware.authenticate,
+  adminAuthorization,
   adminController.blockUser,
 );
 
 router.patch(
   ADMIN_ROUTES.UNBLOCK_USER,
-  adminAuthMiddleware.authenticate,
+  authMiddleware.authenticate,
+  adminAuthorization,
   adminController.unblockUser,
 );
 
