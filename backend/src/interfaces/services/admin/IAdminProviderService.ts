@@ -1,7 +1,7 @@
-import type { IProvider } from "../../../models/Provider.model";
+import type { IAdminProvider } from "../../../dtos/admin/AdminProviderDto";
 
 export interface IAdminProviderService {
-  getPendingProviders(): Promise<IProvider[]>;
+  getPendingProviders(): Promise<IAdminProvider[]>;
   approveProvider(providerId: string): Promise<void>;
   rejectProvider(providerId: string): Promise<void>;
 }

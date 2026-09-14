@@ -7,5 +7,9 @@ export interface IProviderRepository extends IBaseRepository<IProvider> {
 
   findByStatus(status: ProviderStatus): Promise<IProvider[]>;
 
-  updateStatus(id: string, status: ProviderStatus): Promise<IProvider | null>;
+  updateStatus(
+    id: string,
+    currentStatus: ProviderStatus,
+    nextStatus: ProviderStatus,
+  ): Promise<IProvider | null>;
 }

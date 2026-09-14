@@ -34,15 +34,17 @@ export class ProviderRepository
 
   async updateStatus(
     id: string,
-    status: ProviderStatus,
+    currentStatus: ProviderStatus,
+    nextStatus: ProviderStatus,
   ): Promise<IProvider | null> {
     return this.model.findOneAndUpdate(
       {
         _id: id,
+        status: currentStatus,
         deletedAt: null,
       },
       {
-        status,
+        status: nextStatus,
       },
       {
         new: true,
