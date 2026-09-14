@@ -3,6 +3,7 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../container/types";
 import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
+import { ProviderStatus } from "../../shared/enums/ProviderStatus";
 import { AppError } from "../../shared/errors/AppError";
 
 import type { ResetPasswordDto } from "../../dtos/auth/ResetPassword.dto";
@@ -33,6 +34,13 @@ export class ProviderResetPasswordService
       throw new AppError(
         ERROR_MESSAGES.INVALID_RESET_TOKEN,
         HTTP_STATUS.UNAUTHORIZED,
+      );
+    }
+
+    if (provider.status !== ProviderStatus.ACTIVE) {
+      throw new AppError(
+        ERROR_MESSAGES.USER_ACCOUNT_INACTIVE,
+        HTTP_STATUS.FORBIDDEN,
       );
     }
 

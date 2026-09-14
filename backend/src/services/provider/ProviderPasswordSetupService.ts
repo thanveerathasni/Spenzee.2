@@ -3,6 +3,7 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../container/types";
 import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
+import { ProviderStatus } from "../../shared/enums/ProviderStatus";
 import { AppError } from "../../shared/errors/AppError";
 
 import type { IProviderPasswordSetupTokenRepository } from "../../interfaces/repositories/provider/IProviderPasswordSetupTokenRepository";
@@ -49,16 +50,28 @@ export class ProviderPasswordSetupService
       );
     }
 
-    if (setupToken.token !== token) {
+    const provider = await this._providerRepository.findById(providerId);
+
+    if (!provider) {
       throw new AppError(
         ERROR_MESSAGES.INVALID_TOKEN,
         HTTP_STATUS.UNAUTHORIZED,
       );
     }
 
-    const provider = await this._providerRepository.findById(providerId);
+    if (provider.status !== ProviderStatus.ACTIVE) {
+      throw new AppError(
+        ERROR_MESSAGES.USER_ACCOUNT_INACTIVE,
+        HTTP_STATUS.FORBIDDEN,
+      );
+    }
 
-    if (!provider) {
+    const tokenMatches = await this._passwordService.compare(
+      token,
+      setupToken.token,
+    );
+
+    if (!tokenMatches) {
       throw new AppError(
         ERROR_MESSAGES.INVALID_TOKEN,
         HTTP_STATUS.UNAUTHORIZED,
@@ -83,13 +96,6 @@ export class ProviderPasswordSetupService
 
     await this._tokenRepository.deleteByProvider(providerId);
   }
-
-
-
 }
-
-
-
-
 
 

@@ -15,6 +15,7 @@ import type { IProviderPasswordSetupTokenRepository } from "../../interfaces/rep
 import type { IProviderRepository } from "../../interfaces/repositories/provider/IProviderRepository";
 import type { IAdminProviderService } from "../../interfaces/services/admin/IAdminProviderService";
 import type { IEmailService } from "../../interfaces/services/email/IEmailService";
+import type { IPasswordService } from "../../interfaces/services/auth/IPasswordService";
 
 @injectable()
 export class AdminProviderService implements IAdminProviderService {
@@ -27,6 +28,9 @@ export class AdminProviderService implements IAdminProviderService {
 
     @inject(TYPES.EmailService)
     private readonly _emailService: IEmailService,
+
+    @inject(TYPES.PasswordService)
+    private readonly _passwordService: IPasswordService,
   ) {}
 
   async getPendingProviders(): Promise<IAdminProvider[]> {
@@ -53,13 +57,15 @@ export class AdminProviderService implements IAdminProviderService {
 
     const token = randomBytes(32).toString("hex");
 
+    const hashedToken = await this._passwordService.hash(token);
+
     const expiresAt = new Date(
       Date.now() + AUTH_TOKEN_EXPIRY.RESET_PASSWORD_MINUTES * 60 * 1000,
     );
 
     await this._tokenRepository.upsertByProvider(
       providerId,
-      token,
+      hashedToken,
       expiresAt,
     );
 
