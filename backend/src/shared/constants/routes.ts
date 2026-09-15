@@ -27,6 +27,7 @@ export const ADMIN_ROUTES = {
   USERS: "/users",
   BLOCK_USER: "/users/:id/block",
   UNBLOCK_USER: "/users/:id/unblock",
+  ACTIVE_PROVIDERS: "/providers/active",
 } as const;
 
 export const USER_ROUTES = {

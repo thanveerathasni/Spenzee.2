@@ -90,4 +90,12 @@ export class AdminProviderService implements IAdminProviderService {
       );
     }
   }
+
+  async getActiveProviders(): Promise<IAdminProvider[]> {
+    const providers = await this._providerRepository.findByStatus(
+      ProviderStatus.ACTIVE,
+    );
+
+    return AdminProviderMapper.toDtoList(providers);
+  }
 }

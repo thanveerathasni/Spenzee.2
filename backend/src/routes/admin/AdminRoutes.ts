@@ -2,8 +2,8 @@ import { Router } from "express";
 
 import { container } from "../../container";
 import { TYPES } from "../../container/types";
-import { validate } from "../../middlewares/validate";
 import { authorize } from "../../middlewares/AuthorizationMiddleware";
+import { validate } from "../../middlewares/validate";
 import { ADMIN_ROUTES } from "../../shared/constants";
 import { UserRole } from "../../shared/enums/UserRole";
 import { loginSchema } from "../../validators/auth/LoginValidator";
@@ -72,6 +72,13 @@ router.patch(
   authMiddleware.authenticate,
   adminAuthorization,
   adminController.unblockUser,
+);
+
+router.get(
+  ADMIN_ROUTES.ACTIVE_PROVIDERS,
+  authMiddleware.authenticate,
+  adminAuthorization,
+  adminController.getActiveProviders,
 );
 
 export default router;

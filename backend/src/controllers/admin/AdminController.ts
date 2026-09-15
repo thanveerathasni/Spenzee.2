@@ -109,4 +109,18 @@ export class AdminController implements IAdminController {
       );
     },
   );
+
+  getActiveProviders = asyncHandler(
+    async (_req: Request, res: Response): Promise<void> => {
+      const activeProviders =
+        await this._adminProviderService.getActiveProviders();
+
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.DATA_FETCHED,
+        activeProviders,
+      );
+    },
+  );
 }

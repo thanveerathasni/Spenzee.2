@@ -8,4 +8,5 @@ export interface IAdminController {
   blockUser: RequestHandler;
   unblockUser: RequestHandler;
   getUsers: RequestHandler;
+  getActiveProviders: RequestHandler;
 }
