@@ -81,4 +81,18 @@ router.get(
   adminController.getActiveProviders,
 );
 
+router.patch(
+  ADMIN_ROUTES.BLOCK_PROVIDER,
+  authMiddleware.authenticate,
+  adminAuthorization,
+  adminController.blockProvider,
+);
+
+router.patch(
+  ADMIN_ROUTES.UNBLOCK_PROVIDER,
+  authMiddleware.authenticate,
+  adminAuthorization,
+  adminController.unblockProvider,
+);
+
 export default router;

@@ -23,6 +23,8 @@ export const ADMIN_ROUTES = {
   PENDING_PROVIDERS: "/providers/pending",
   APPROVE_PROVIDER: "/providers/:id/approve",
   REJECT_PROVIDER: "/providers/:id/reject",
+  BLOCK_PROVIDER: "/providers/:id/block",
+  UNBLOCK_PROVIDER: "/providers/:id/unblock",
 
   USERS: "/users",
   BLOCK_USER: "/users/:id/block",

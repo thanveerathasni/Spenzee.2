@@ -30,4 +30,8 @@ export const SUCCESS_MESSAGES = {
 
   PROVIDER_PASSWORD_SETUP_SUCCESS:
     "Provider password setup completed successfully.",
+
+  PROVIDER_BLOCKED: "Provider blocked successfully.",
+
+  PROVIDER_UNBLOCKED: "Provider unblocked successfully.",
 } as const;

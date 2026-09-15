@@ -98,4 +98,52 @@ export class AdminProviderService implements IAdminProviderService {
 
     return AdminProviderMapper.toDtoList(providers);
   }
+
+  async blockProvider(providerId: string): Promise<void> {
+    const provider = await this._providerRepository.findById(providerId);
+
+    if (!provider) {
+      throw new AppError(
+        "Provider not found.",
+        HTTP_STATUS.NOT_FOUND,
+      );
+    }
+
+    if (provider.status !== ProviderStatus.ACTIVE) {
+      throw new AppError(
+        "Only active providers can be blocked.",
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+
+    await this._providerRepository.updateStatus(
+      providerId,
+      ProviderStatus.ACTIVE,
+      ProviderStatus.BLOCKED,
+    );
+  }
+
+  async unblockProvider(providerId: string): Promise<void> {
+    const provider = await this._providerRepository.findById(providerId);
+
+    if (!provider) {
+      throw new AppError(
+        "Provider not found.",
+        HTTP_STATUS.NOT_FOUND,
+      );
+    }
+
+    if (provider.status !== ProviderStatus.BLOCKED) {
+      throw new AppError(
+        "Only blocked providers can be unblocked.",
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+
+    await this._providerRepository.updateStatus(
+      providerId,
+      ProviderStatus.BLOCKED,
+      ProviderStatus.ACTIVE,
+    );
+  }
 }

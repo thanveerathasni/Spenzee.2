@@ -123,4 +123,33 @@ export class AdminController implements IAdminController {
       );
     },
   );
+
+  blockProvider = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      await this._adminProviderService.blockProvider(
+        req.params.id as string,
+      );
+
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.PROVIDER_BLOCKED,
+      );
+    },
+  );
+
+  unblockProvider = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      await this._adminProviderService.unblockProvider(
+        req.params.id as string,
+      );
+
+      successResponse(
+        res,
+        HTTP_STATUS.OK,
+        SUCCESS_MESSAGES.PROVIDER_UNBLOCKED,
+      );
+    },
+  );
+
 }

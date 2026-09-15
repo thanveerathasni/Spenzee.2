@@ -5,4 +5,6 @@ export interface IAdminProviderService {
   approveProvider(providerId: string): Promise<void>;
   rejectProvider(providerId: string): Promise<void>;
   getActiveProviders(): Promise<IAdminProvider[]>;
+  blockProvider(providerId: string): Promise<void>;
+  unblockProvider(providerId: string): Promise<void>;
 }
