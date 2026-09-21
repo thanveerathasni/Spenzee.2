@@ -50,18 +50,6 @@ export class LoginService implements ILoginService {
       );
     }
 
-    if (user.deletedAt) {
-      this._logger.warn(LOG_MESSAGES.LOGIN_FAILED, {
-        email: data.email,
-        reason: "soft-deleted account",
-      });
-
-      throw new AppError(
-        ERROR_MESSAGES.USER_ACCOUNT_DELETED,
-        HTTP_STATUS.FORBIDDEN,
-      );
-    }
-
     if (!user.isActive) {
       this._logger.warn(LOG_MESSAGES.LOGIN_FAILED, {
         email: data.email,

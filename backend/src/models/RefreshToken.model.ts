@@ -1,7 +1,6 @@
 import { Schema, model, type Types } from "mongoose";
 
 export interface IRefreshToken {
-  deletedAt?: Date | null;
   userId: Types.ObjectId;
   userType: "User" | "Provider" | "Admin";
   token: string;

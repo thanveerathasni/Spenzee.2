@@ -1,14 +1,14 @@
 import { injectable } from "inversify";
 
 import { RefreshTokenModel } from "../../models/RefreshToken.model";
-import { BaseRepository } from "../base/BaseRepository";
+import { BaseRepositoryWithoutSoftDelete } from "../base/BaseRepositoryWithoutSoftDelete";
 
 import type { IRefreshTokenRepository } from "../../interfaces/repositories/auth/IRefreshTokenRepository";
 import type { IRefreshToken } from "../../models/RefreshToken.model";
 
 @injectable()
 export class RefreshTokenRepository
-  extends BaseRepository<IRefreshToken>
+  extends BaseRepositoryWithoutSoftDelete<IRefreshToken>
   implements IRefreshTokenRepository
 {
   constructor() {
@@ -30,5 +30,13 @@ export class RefreshTokenRepository
 
   async deleteByToken(token: string): Promise<boolean> {
     return this.forceDelete({ token });
+  }
+
+  async deleteByUserId(userId: string): Promise<number> {
+    const result = await this.model.deleteMany({
+      userId,
+    });
+
+    return result.deletedCount;
   }
 }
