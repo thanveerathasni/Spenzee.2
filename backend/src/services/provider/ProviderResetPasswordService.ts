@@ -7,6 +7,7 @@ import { ProviderStatus } from "../../shared/enums/ProviderStatus";
 import { AppError } from "../../shared/errors/AppError";
 
 import type { ResetPasswordDto } from "../../dtos/auth/ResetPassword.dto";
+import type { IRefreshTokenRepository } from "../../interfaces/repositories/auth/IRefreshTokenRepository";
 import type { IProviderRepository } from "../../interfaces/repositories/provider/IProviderRepository";
 import type { IProviderResetPasswordTokenRepository } from "../../interfaces/repositories/provider/IProviderResetPasswordTokenRepository";
 import type { IPasswordService } from "../../interfaces/services/auth/IPasswordService";
@@ -25,6 +26,9 @@ export class ProviderResetPasswordService
 
     @inject(TYPES.PasswordService)
     private readonly _passwordService: IPasswordService,
+
+    @inject(TYPES.RefreshTokenRepository)
+    private readonly _refreshTokenRepository: IRefreshTokenRepository,
   ) {}
 
   async execute(data: ResetPasswordDto): Promise<void> {
@@ -44,8 +48,10 @@ export class ProviderResetPasswordService
       );
     }
 
+    const providerId = provider._id.toString();
+
     const resetToken = await this._tokenRepository.findByProvider(
-      provider._id.toString(),
+      providerId,
     );
 
     if (!resetToken) {
@@ -56,9 +62,7 @@ export class ProviderResetPasswordService
     }
 
     if (resetToken.expiresAt.getTime() <= Date.now()) {
-      await this._tokenRepository.deleteByProvider(
-        provider._id.toString(),
-      );
+      await this._tokenRepository.deleteByProvider(providerId);
 
       throw new AppError(
         ERROR_MESSAGES.TOKEN_EXPIRED,
@@ -78,10 +82,12 @@ export class ProviderResetPasswordService
       );
     }
 
-    const hashedPassword = await this._passwordService.hash(data.password);
+    const hashedPassword = await this._passwordService.hash(
+      data.password,
+    );
 
     const updatedProvider = await this._providerRepository.updateById(
-      provider._id.toString(),
+      providerId,
       {
         password: hashedPassword,
       },
@@ -94,8 +100,8 @@ export class ProviderResetPasswordService
       );
     }
 
-    await this._tokenRepository.deleteByProvider(
-      provider._id.toString(),
-    );
+    await this._tokenRepository.deleteByProvider(providerId);
+
+    await this._refreshTokenRepository.deleteByUserId(providerId);
   }
 }

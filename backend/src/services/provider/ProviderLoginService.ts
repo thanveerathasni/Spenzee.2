@@ -35,7 +35,7 @@ export class ProviderLoginService implements IProviderLoginService {
   async execute(data: LoginRequestDto): Promise<ProviderLoginResponseDto> {
     const provider = await this._providerRepository.findByEmail(data.email);
 
-    if (!provider?.password) {
+    if (!provider) {
       throw new AppError(
         ERROR_MESSAGES.INVALID_CREDENTIALS,
         HTTP_STATUS.UNAUTHORIZED,
@@ -46,6 +46,13 @@ export class ProviderLoginService implements IProviderLoginService {
       throw new AppError(
         ERROR_MESSAGES.USER_ACCOUNT_INACTIVE,
         HTTP_STATUS.FORBIDDEN,
+      );
+    }
+
+    if (!provider.password) {
+      throw new AppError(
+        ERROR_MESSAGES.INVALID_CREDENTIALS,
+        HTTP_STATUS.UNAUTHORIZED,
       );
     }
 
