@@ -53,15 +53,17 @@ export class ProviderForgotPasswordService
         return;
       }
 
-      if (!provider._id) {
+      const providerId = provider._id;
+
+      if (!providerId) {
         throw new AppError(
           ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
           HTTP_STATUS.INTERNAL_SERVER_ERROR,
         );
       }
 
+      const providerIdString = providerId.toString();
       const resetToken = randomBytes(32).toString("hex");
-
       const hashedToken = await this._passwordService.hash(resetToken);
 
       const expiresAt = new Date(
@@ -70,7 +72,7 @@ export class ProviderForgotPasswordService
       );
 
       await this._tokenRepository.upsertByProvider(
-        provider._id.toString(),
+        providerIdString,
         hashedToken,
         expiresAt,
       );
