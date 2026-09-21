@@ -2,20 +2,19 @@ import { randomBytes } from "node:crypto";
 
 import { inject, injectable } from "inversify";
 
-import type { IAdminProvider } from "../../dtos/admin/AdminProviderDto";
 import { TYPES } from "../../container/types";
 import { AdminProviderMapper } from "../../mappers/admin/AdminProviderMapper";
 import { AUTH_TOKEN_EXPIRY } from "../../shared/constants/auth";
-import { ERROR_MESSAGES } from "../../shared/constants/messages/errorMessages";
 import { HTTP_STATUS } from "../../shared/constants/status/httpStatus";
 import { ProviderStatus } from "../../shared/enums/ProviderStatus";
 import { AppError } from "../../shared/errors/AppError";
 
+import type { IAdminProvider } from "../../dtos/admin/AdminProviderDto";
 import type { IProviderPasswordSetupTokenRepository } from "../../interfaces/repositories/provider/IProviderPasswordSetupTokenRepository";
 import type { IProviderRepository } from "../../interfaces/repositories/provider/IProviderRepository";
 import type { IAdminProviderService } from "../../interfaces/services/admin/IAdminProviderService";
-import type { IEmailService } from "../../interfaces/services/email/IEmailService";
 import type { IPasswordService } from "../../interfaces/services/auth/IPasswordService";
+import type { IEmailService } from "../../interfaces/services/email/IEmailService";
 
 @injectable()
 export class AdminProviderService implements IAdminProviderService {
@@ -24,13 +23,13 @@ export class AdminProviderService implements IAdminProviderService {
     private readonly _providerRepository: IProviderRepository,
 
     @inject(TYPES.ProviderPasswordSetupTokenRepository)
-    private readonly _tokenRepository: IProviderPasswordSetupTokenRepository,
-
-    @inject(TYPES.EmailService)
-    private readonly _emailService: IEmailService,
+    private readonly _providerPasswordSetupTokenRepository: IProviderPasswordSetupTokenRepository,
 
     @inject(TYPES.PasswordService)
     private readonly _passwordService: IPasswordService,
+
+    @inject(TYPES.EmailService)
+    private readonly _emailService: IEmailService,
   ) {}
 
   async getPendingProviders(): Promise<IAdminProvider[]> {
@@ -42,53 +41,68 @@ export class AdminProviderService implements IAdminProviderService {
   }
 
   async approveProvider(providerId: string): Promise<void> {
-    const provider = await this._providerRepository.updateStatus(
+    const provider = await this._providerRepository.findById(providerId);
+
+    if (!provider) {
+      throw new AppError(
+        "Provider not found.",
+        HTTP_STATUS.NOT_FOUND,
+      );
+    }
+
+    if (provider.status !== ProviderStatus.PENDING) {
+      throw new AppError(
+        "Only pending providers can be approved.",
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+
+    const passwordSetupToken = randomBytes(32).toString("hex");
+
+    await this._providerPasswordSetupTokenRepository.upsertByProvider(
+      providerId,
+      passwordSetupToken,
+      new Date(
+        Date.now() +
+          AUTH_TOKEN_EXPIRY.PROVIDER_PASSWORD_SETUP_MINUTES * 60 * 1000,
+      ),
+    );
+
+    await this._providerRepository.updateStatus(
       providerId,
       ProviderStatus.PENDING,
       ProviderStatus.ACTIVE,
     );
 
-    if (!provider) {
-      throw new AppError(
-        ERROR_MESSAGES.RESOURCE_NOT_FOUND,
-        HTTP_STATUS.NOT_FOUND,
-      );
-    }
-
-    const token = randomBytes(32).toString("hex");
-
-    const hashedToken = await this._passwordService.hash(token);
-
-    const expiresAt = new Date(
-      Date.now() + AUTH_TOKEN_EXPIRY.RESET_PASSWORD_MINUTES * 60 * 1000,
-    );
-
-    await this._tokenRepository.upsertByProvider(
-      providerId,
-      hashedToken,
-      expiresAt,
-    );
-
     await this._emailService.sendProviderPasswordSetupEmail(
       provider.email,
       providerId,
-      token,
+      passwordSetupToken,
     );
   }
 
   async rejectProvider(providerId: string): Promise<void> {
-    const provider = await this._providerRepository.updateStatus(
+    const provider = await this._providerRepository.findById(providerId);
+
+    if (!provider) {
+      throw new AppError(
+        "Provider not found.",
+        HTTP_STATUS.NOT_FOUND,
+      );
+    }
+
+    if (provider.status !== ProviderStatus.PENDING) {
+      throw new AppError(
+        "Only pending providers can be rejected.",
+        HTTP_STATUS.BAD_REQUEST,
+      );
+    }
+
+    await this._providerRepository.updateStatus(
       providerId,
       ProviderStatus.PENDING,
       ProviderStatus.REJECTED,
     );
-
-    if (!provider) {
-      throw new AppError(
-        ERROR_MESSAGES.RESOURCE_NOT_FOUND,
-        HTTP_STATUS.NOT_FOUND,
-      );
-    }
   }
 
   async getActiveProviders(): Promise<IAdminProvider[]> {
