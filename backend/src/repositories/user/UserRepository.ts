@@ -22,7 +22,16 @@ export class UserRepository
   async findLoginUserByEmail(email: string): Promise<IUser | null> {
     return this.model
       .findOne({
-        email,
+        email: email.trim().toLowerCase(),
+        deletedAt: null,
+      })
+      .select("+password");
+  }
+
+  async findUserForPasswordChange(userId: string): Promise<IUser | null> {
+    return this.model
+      .findOne({
+        _id: userId,
         deletedAt: null,
       })
       .select("+password");

@@ -1,9 +1,10 @@
 import { injectable } from "inversify";
 
-import type { IPendingRegistrationRepository } from "../../interfaces/repositories/auth/IPendingRegistrationRepository";
-import type { IPendingRegistration } from "../../models/PendingRegistration.model";
 import { PendingRegistrationModel } from "../../models/PendingRegistration.model";
 import { BaseRepository } from "../base/BaseRepository";
+
+import type { IPendingRegistrationRepository } from "../../interfaces/repositories/auth/IPendingRegistrationRepository";
+import type { IPendingRegistration } from "../../models/PendingRegistration.model";
 
 @injectable()
 export class PendingRegistrationRepository
