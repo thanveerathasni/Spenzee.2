@@ -18,24 +18,47 @@ export class OtpRepository
   async create(
     data: Pick<IOtp, "email" | "code" | "expiresAt">,
   ): Promise<IOtp> {
-    return super.create(data);
+    return super.create({
+      ...data,
+      email: data.email.trim().toLowerCase(),
+    });
   }
 
-  async findByEmail(email: string): Promise<IOtp | null> {
-    return this.findOne({ email });
+  async findByEmail(
+    email: string,
+  ): Promise<IOtp | null> {
+    return this.findOne({
+      email: email.trim().toLowerCase(),
+    });
   }
 
   async updateByEmail(
     email: string,
-    data: Partial<Pick<IOtp, "code" | "expiresAt" | "attempts">>,
+    data: Partial<
+      Pick<IOtp, "code" | "expiresAt" | "attempts">
+    >,
   ): Promise<IOtp | null> {
-    return this.updateOne({ email }, data);
+    return this.updateOne(
+      {
+        email: email.trim().toLowerCase(),
+      },
+      data,
+    );
   }
 
-  async incrementAttempts(email: string): Promise<IOtp | null> {
+  async incrementAttempts(
+    email: string,
+  ): Promise<IOtp | null> {
     return this.model.findOneAndUpdate(
-      { email },
-      { $inc: { attempts: 1 } },
+      {
+        email: email.trim().toLowerCase(),
+        deletedAt: null,
+      },
+      {
+        $inc: {
+          attempts: 1,
+        },
+      },
       {
         new: true,
         runValidators: true,
@@ -44,6 +67,8 @@ export class OtpRepository
   }
 
   async deleteByEmail(email: string): Promise<boolean> {
-    return this.forceDelete({ email });
+    return this.forceDelete({
+      email: email.trim().toLowerCase(),
+    });
   }
 }

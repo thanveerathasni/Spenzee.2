@@ -15,17 +15,28 @@ export class PendingRegistrationRepository
     super(PendingRegistrationModel);
   }
 
-  async findByEmail(email: string): Promise<IPendingRegistration | null> {
-    return this.findOne({ email });
+  async findByEmail(
+    email: string,
+  ): Promise<IPendingRegistration | null> {
+    return this.findOne({
+      email: email.trim().toLowerCase(),
+    });
   }
 
   async create(
     data: Pick<
       IPendingRegistration,
-      "firstName" | "lastName" | "email" | "password" | "expiresAt"
+      | "firstName"
+      | "lastName"
+      | "email"
+      | "password"
+      | "expiresAt"
     >,
   ): Promise<IPendingRegistration> {
-    return super.create(data);
+    return super.create({
+      ...data,
+      email: data.email.trim().toLowerCase(),
+    });
   }
 
   async updateByEmail(
@@ -33,14 +44,24 @@ export class PendingRegistrationRepository
     data: Partial<
       Pick<
         IPendingRegistration,
-        "firstName" | "lastName" | "password" | "expiresAt"
+        | "firstName"
+        | "lastName"
+        | "password"
+        | "expiresAt"
       >
     >,
   ): Promise<IPendingRegistration | null> {
-    return this.updateOne({ email }, data);
+    return this.updateOne(
+      {
+        email: email.trim().toLowerCase(),
+      },
+      data,
+    );
   }
 
   async deleteByEmail(email: string): Promise<boolean> {
-    return this.forceDelete({ email });
+    return this.forceDelete({
+      email: email.trim().toLowerCase(),
+    });
   }
 }

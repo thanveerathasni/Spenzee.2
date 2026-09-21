@@ -16,10 +16,14 @@ export class UserRepository
   }
 
   async findByEmail(email: string): Promise<IUser | null> {
-    return this.findOne({ email });
+    return this.findOne({
+      email: email.trim().toLowerCase(),
+    });
   }
 
-  async findLoginUserByEmail(email: string): Promise<IUser | null> {
+  async findLoginUserByEmail(
+    email: string,
+  ): Promise<IUser | null> {
     return this.model
       .findOne({
         email: email.trim().toLowerCase(),
@@ -28,7 +32,9 @@ export class UserRepository
       .select("+password");
   }
 
-  async findUserForPasswordChange(userId: string): Promise<IUser | null> {
+  async findUserForPasswordChange(
+    userId: string,
+  ): Promise<IUser | null> {
     return this.model
       .findOne({
         _id: userId,
